@@ -1,0 +1,34 @@
+{
+  "name": "mpr",
+  "version": "0.0.1",
+  "description": "mapper lib, maps source to destination",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://dbones@bitbucket.org/dboneslabs/mpr.git"
+  },
+  "keywords": [
+    "mapper",
+    "mpr",
+    "object-mapper",
+    "typescript",
+    "ts",
+    "js",
+    "javascript"
+  ],
+  "author": "dbones labs",
+  "license": "Apache-2.0",
+  "homepage": "https://bitbucket.org/dboneslabs/mpr#readme",
+  "devDependencies": {
+    "@types/chai": "^4.0.4",
+    "@types/mocha": "^2.2.42",
+    "chai": "^4.1.2",
+    "mocha": "^3.5.0"
+  },
+  "dependencies": {
+    "reflect-metadata": "^0.1.10"
+  }
+}

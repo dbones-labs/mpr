@@ -3,14 +3,15 @@ import { TypeConverter } from "./type-converter";
 import { Mapper } from "../Mapper";
 import { MappingContext } from "./mapping-context";
 
-export class TypeConverterBase<TSrc, TDest> implements TypeConverter {
-    execute(context: MappingContext): void {
+export abstract class TypeConverterBase<TSrc, TDest> implements TypeConverter {
+
+    abstract sourceType: string;
+    abstract destinationType: string;
+
+    execute(context: MappingContext): any {
         let result = this.convert(context.source, context.destination, context.mapper);
-        context.destination = result;
+        return result;
     }
 
-    convert(source: TSrc, destination: TDest, mapper: Mapper) : TDest {
-        throw new Error("please override this function");
-    }
-
+    abstract convert(source: TSrc, destination: TDest, mapper: Mapper) : TDest;
 }

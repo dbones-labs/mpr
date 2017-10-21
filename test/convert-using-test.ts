@@ -39,7 +39,8 @@ describe('convert via using with typeconverter', () => {
 class MapSetup implements Setup {
     configure(builder: Builder): void {
 
-        builder.createMap("models.todo", "dto.todo").using(new TodoModelToDtoConverter())
+        builder.createMap("models.todo", "dto.todo")
+            .using(new TodoModelToDtoConverter())
 
     }
 
@@ -48,7 +49,10 @@ class MapSetup implements Setup {
 
 
 class TodoModelToDtoConverter extends TypeConverterBase<Todo, any> {
-    
+
+    sourceType = "models.todo";
+    destinationType = "dto.todo";
+
     convert(source: Todo, destination: any, mapper: Mapper) {
         if(destination == null) destination = {  };
 

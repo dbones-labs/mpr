@@ -33,6 +33,10 @@ export class FluentTypeMapping<TSrc, TDest> {
         return this;
     }
 
+    /**
+     * supply a TypeConverter to use.
+     * @param typeConverter the converter to use
+     */
     using(typeConverter: TypeConverter): void {
         this._typeMapping.converter = typeConverter;
     }

@@ -29,6 +29,7 @@ export class DefaultTypeConverterLocator implements TypeConverterLocator {
         let converter = this._mapsBySrcToDest.get(key);
         if (converter != null) return converter;
 
+        //TODO: here fix
         if (lookup.source.isArray == true && lookup.destination.isArray == true) {
             key = this.createKey(`*[]`, `*[]`);
             let converter = this._mapsBySrcToDest.get(key);

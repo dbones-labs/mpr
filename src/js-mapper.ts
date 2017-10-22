@@ -22,7 +22,7 @@ export class JsMapper implements Mapper {
         if(source == null) return source;
         if(destinationType == null) throw new Error("destinationType is null");
 
-        let typeProperty = this._configuration.typeStrategy.getTypeProperty(source);
+        let typeProperty = this._configuration.typeStrategy.getTypeFromTypeProperty(source);
         let sourceType = source[typeProperty];
 
         var key = this.getKey(sourceType, destinationType);
@@ -38,10 +38,10 @@ export class JsMapper implements Mapper {
         if(source == null) return;
         if(destination == null) throw new Error("destination is null");
 
-        let typeProperty = this._configuration.typeStrategy.getTypeProperty(source);
+        let typeProperty = this._configuration.typeStrategy.getTypeFromTypeProperty(source);
         let sourceType = source[typeProperty];
 
-        typeProperty = this._configuration.typeStrategy.getTypeProperty(destination);
+        typeProperty = this._configuration.typeStrategy.getTypeFromTypeProperty(destination);
         let destinationType = destination[typeProperty];
 
         var key = this.getKey(sourceType, destinationType);

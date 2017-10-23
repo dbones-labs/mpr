@@ -1,10 +1,11 @@
 import 'mocha';
 import { MapperFactor } from "../src/mapper-factory";
 import { Setup } from "../src/initializing/Setup";
-import { Builder } from "../src/initializing/builder";
+
 import { TypeConverterBase } from "../src/core/type-converter-base";
 import { Mapper } from "../src/Mapper";
 import { expect  } from "chai";
+import { Builder } from '../src/initializing/builders/builder';
 
 describe('convert via using with typeconverter', () => {
 
@@ -40,7 +41,7 @@ class MapSetup implements Setup {
     configure(builder: Builder): void {
 
         builder.createMap("models.todo", "dto.todo")
-            .using(new TodoModelToDtoConverter())
+            .using(new TodoModelToDtoConverter());
 
     }
 

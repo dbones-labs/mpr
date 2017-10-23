@@ -1,128 +1,73 @@
-import { Mapper } from "./Mapper";
-import { Map  } from "./core/map";
+import { MapInformation } from './core/map-information';
+import { AdvancedMapper } from "./Mapper";
 import { Configuration } from "./configuration";
-import { Dictionary } from "./dictionary";
 import { MappingContext } from "./core/mapping-context";
+import { TypeConverter } from "./core/type-converter";
+import { TypeConverterLocator } from "./core/type-converter-locator";
+import { TypeReflection, DefaultTypeReflection } from "./strategies/type-reflection";
 
-export class JsMapper implements Mapper {
+export class JsMapper implements AdvancedMapper {
 
-    _configuration: Configuration;
+    private _configuration: Configuration;
+    private _typeConverterLocator: TypeConverterLocator;
+    private _typeReflection: TypeReflection;
 
-    constructor(configuration:Configuration, mappings: Map[]) {
-        mappings.forEach(map => {
-            let key = this.getKey(map.sourceType, map.destinationType);
-            this._mappings.set(key, map);
-        });
-
+    /**
+     * create a mapper, do not use this direcly, create this class via the MapperFactory class.
+     * @param configuration the configuration to be used by this mapper
+     * @param typeConverters the type converters this mapper will use
+     */
+    constructor(configuration: Configuration, typeConverters: TypeConverter[]) {
         this._configuration = configuration;
+        this._typeConverterLocator = configuration.typeConverterLocator;
+        this._typeReflection = new DefaultTypeReflection();
+
+        typeConverters.forEach(converter => {
+            this._typeConverterLocator.Add(converter);
+        });
     }
 
 
-    map(source: any, destinationType: string) {
-        if(source == null) return source;
-        if(destinationType == null) throw new Error("destinationType is null");
+    map(source: any, destinationType: string): any {
+        if (source == null) return source;
+        if (destinationType == null) throw new Error("destinationType is null");
 
-        let typeProperty = this._configuration.typeStrategy.getTypeFromTypeProperty(source);
-        let sourceType = source[typeProperty];
+        let sourceType = this._typeReflection.getType(source, this._configuration.typeStrategy);
+        let mapLookup = this._typeConverterLocator.GetMapLookup(sourceType, destinationType);
+        let ctx = this.createContext(source, null, mapLookup);
 
-        var key = this.getKey(sourceType, destinationType);
-        var map = this._mappings.get(key);
-        if(map == null) throw new Error(`mapping not supported, ${key}`);
-
-        let ctx = this.createContext(source, null);
-        map.converter.execute(ctx);
+        this.mapIt(ctx);
         return ctx.destination;
     }
 
     mapTo(source: any, destination: any) {
-        if(source == null) return;
-        if(destination == null) throw new Error("destination is null");
+        if (source == null) return;
+        if (destination == null) throw new Error("destination is null");
 
-        let typeProperty = this._configuration.typeStrategy.getTypeFromTypeProperty(source);
-        let sourceType = source[typeProperty];
+        let sourceType = this._typeReflection.getType(source, this._configuration.typeStrategy);
+        let destinationType = this._typeReflection.getType(source, this._configuration.typeStrategy);
+        let mapLookup = this._typeConverterLocator.GetMapLookup(sourceType, destinationType);
+        let ctx = this.createContext(source, destination, mapLookup);
 
-        typeProperty = this._configuration.typeStrategy.getTypeFromTypeProperty(destination);
-        let destinationType = destination[typeProperty];
-
-        var key = this.getKey(sourceType, destinationType);
-        var map = this._mappings.get(key);
-        if(map == null) throw new Error(`mapping not supported, ${key}`);
-
-        let ctx = this.createContext(source, null);
-        map.converter.execute(ctx);
-        return ctx.destination;
+        this.mapIt(ctx);
     }
 
-    mapIt(sourceType: string, source: any, destinationType: string, destination: any) {
-        if(source == null) return;
+    mapIt(context: MappingContext) {
+        let mapLookup = context.mapInformation;
 
+        let converter = this._typeConverterLocator.GetConverter(mapLookup);
+        if (converter == null) throw new Error(`mapping not supported, ${mapLookup.source}->${mapLookup.destination}`);
+
+        return converter.execute(context);
     }
 
-    private createContext(source: any, destination: any){
+    private createContext(source: any, destination: any, mapInformation: MapInformation) {
         let ctx = new MappingContext();
         ctx.destination = destination;
         ctx.source = source;
         ctx.mapper = this;
+        ctx.mapInformation = mapInformation;
         return ctx;
     }
 
-}
-
-
-class MapSeeker {
-
-    _mappings: Dictionary<Map> = new Dictionary<Map>();
-
-    _configuration: Configuration;
-
-    constructor(configuration: Configuration, mappings: Map[]) {
-        mappings.forEach(map => {
-            let key = this.getKey(map.sourceType, map.destinationType);
-            this._mappings.set(key, map);
-        });
-
-        this._configuration = configuration;
-        
-    }
-
-    getMap(source: any, destinationType: string) {
-
-    }
-
-    private getPossibleType(item: any) {
-
-        let type = typeof item;
-
-        if (type === 'object') return Type.object;
-        
-        if (Array.isArray(item)) return Type.collection;
-
-        let isValueType = 
-            type === 'string'    
-            || type === 'number'
-            || type === 'boolean';
-
-        if(isValueType) return Type.collection;
-
-        throw new Error("no idea what this item is");
-        
-    }
-
-    private getKey(source:string, destination: string): string {
-        return `${source}->${destination}`;
-    }
-
-}
-
-class TypeInfo {
-
-    type: Type;
-    name:string;
-
-}
-
-enum Type {
-    valueOrString,
-    collection,
-    object
 }

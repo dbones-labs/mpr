@@ -1,4 +1,4 @@
-import { Mapper } from "../mapper";
+import { AdvancedMapper } from "../mapper";
 import { MapInformation } from "./map-information";
 
 /**
@@ -18,7 +18,7 @@ export class MappingContext {
     /**
      * access to the mapper instance.
      */
-    mapper: Mapper;
+    mapper: AdvancedMapper;
 
     /**
      * informaton about the mapping.

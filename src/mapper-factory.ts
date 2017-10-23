@@ -7,10 +7,14 @@ import { Builder } from "./initializing/builders/builder";
 
 export class MapperFactor {
 
-    private _builder: Builder = new Builder();
+    private _builder: Builder;
     private _config: Configuration = new Configuration();
-
     mapCompiler: MapCompiler = new DefaultMapCompiler();
+
+    constructor() {
+        this._builder = new Builder(this._config);        
+    }
+
 
     addSetup(setup: Setup) {
         setup.configure(this._builder);

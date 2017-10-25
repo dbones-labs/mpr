@@ -1,6 +1,7 @@
 import { MapInformation, MapComponent } from "./map-information";
 import { TypeConverter } from "./type-converter";
 import { Dictionary } from "../dictionary";
+import { Types } from "./types";
 
 export interface TypeConverterLocator {
 
@@ -22,6 +23,8 @@ export class DefaultTypeConverterLocator implements TypeConverterLocator {
         let key = this.createKey(typeConverter.sourceType, typeConverter.destinationType);
         this._mapsBySrcToDest.set(key, typeConverter);
     }
+
+    
     GetConverter(lookup: MapInformation): TypeConverter {
 
         let key = this.createKey(lookup.source.getName(), lookup.destination.getName());
@@ -31,16 +34,17 @@ export class DefaultTypeConverterLocator implements TypeConverterLocator {
 
         //TODO: here fix
         if (lookup.source.isArray == true && lookup.destination.isArray == true) {
-            key = this.createKey(`*[]`, `*[]`);
+            key = this.createKey(Types.objectArray, Types.objectArray);
             let converter = this._mapsBySrcToDest.get(key);
             if (converter != null) return converter;
         }
 
+
+
         throw new Error(`sorry key not supported ${key}`);
-
-
-
     }
+
+
     GetMapLookup(sourceType: string, destinationType: string): MapInformation {
 
         let source = this.getMapComponent(sourceType);
@@ -57,8 +61,8 @@ export class DefaultTypeConverterLocator implements TypeConverterLocator {
         let captures = this.nameExp.exec(type);
 
         let map = new MapComponent();
-        map.type = captures[0];
-        map.isArray = captures.length == 2;
+        map.type = captures[1];
+        map.isArray = captures[2] != null;
         return map;
     }
 

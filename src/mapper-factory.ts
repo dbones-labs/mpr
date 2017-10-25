@@ -29,10 +29,15 @@ export class MapperFactor {
 
     createMapper(): Mapper {
 
+        //setup the converters from the user
         let converters = this._builder.mappings.map(mapping => {
             return this.mapCompiler.Build(mapping, this._builder.typeMetas, this._config);
         });
-
+        
+        //get the default converters
+        this._config.typeConverters.forEach(converter => {
+            converters.push(converter);
+        });
 
         return new JsMapper(this._config, converters);
     }

@@ -10,7 +10,7 @@ export class TypeMap {
     /**
      * the target type name
      */
-    target: string; 
+    destination: string; 
 
     /**
      * the source's type name
@@ -42,7 +42,7 @@ export class TypeMap {
      */
     constructor(source: string, target: string) {
         this.source = source;
-        this.target = target;
+        this.destination = target;
     }
 
 }

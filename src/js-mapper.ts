@@ -58,7 +58,7 @@ export class JsMapper implements AdvancedMapper {
         let converter = this._typeConverterLocator.GetConverter(mapLookup);
         if (converter == null) throw new Error(`mapping not supported, ${mapLookup.source}->${mapLookup.destination}`);
 
-        context.destination = converter.execute(context);
+        converter.execute(context);
         return context.destination;
     }
 

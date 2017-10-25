@@ -1,42 +1,55 @@
 import 'mocha';
 import { MapperFactor } from "../src/mapper-factory";
 import { Setup } from "../src/initializing/Setup";
-import { TypeConverterBase } from "../src/core/type-converter-base";
-import { Mapper } from "../src/Mapper";
+
 import { expect } from "chai";
 import { Builder } from '../src/initializing/builders/builder';
+import { Types } from '../src/core/types';
 
 
-class TodoModelToDtoConverter extends TypeConverterBase<Todo, any> {
+class Todo {
 
-    sourceType = "models.todo";
-    destinationType = "dto.todo";
+    id: string;
 
-    convert(source: Todo, destination: any, mapper: Mapper) {
-        if (destination == null) destination = {};
+    created: Date;
+    description: string;
 
-        destination.id = source.id;
-        destination.created = source.created;
-        destination.description = source.description;
-        destination.priority = source.priority;
+    priority: Priority
 
-        return destination;
-    }
+    $type: string = 'models.todo';
+}
+
+enum Priority {
+    high,
+    medium,
+    low
 }
 
 
 class MapSetup implements Setup {
     configure(builder: Builder): void {
 
-        builder.createMap("models.todo", "dto.todo")
-            .using(new TodoModelToDtoConverter());
+        builder.addType('models.todo', Todo)
+            .addProperty('id', Types.string)
+            .addProperty('created', Types.date)
+            .addProperty('description', Types.string)
+            .addProperty('priority', Types.number);
+
+        builder.addType('dto.todo')
+            .addProperty('id', Types.string)
+            .addProperty('created', Types.date)
+            .addProperty('description', Types.string)
+            .addProperty('priority', Types.number);
+
+        builder.createMap("models.todo", "dto.todo");
+        builder.createMap("dto.todo", "models.todo");
 
     }
 
 }
 
 
-describe('convert via using with typeconverter', () => {
+describe('automap provided type information is supplied', () => {
 
     let mapperFactor = new MapperFactor();
     mapperFactor.addSetup(new MapSetup());
@@ -99,20 +112,4 @@ describe('convert via using with typeconverter', () => {
 });
 
 
-class Todo {
 
-    id: string;
-
-    created: Date;
-    description: string;
-
-    priority: Priority
-
-    $type: string = 'models.todo';
-}
-
-enum Priority {
-    high,
-    medium,
-    low
-}

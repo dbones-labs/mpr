@@ -23,7 +23,7 @@ export class TypeMeta {
     
     
         constructor(typeName: string) {
-            this.name = name;
+            this.name = typeName;
         }
     
         /**
@@ -75,6 +75,7 @@ export class TypeMeta {
             }
             
             mapComponent.type = type;
+            property.mapComponent = mapComponent;
     
             this.properties.set(name, property);
             this.propertiesKeyedOnCamelCase.set(processedName, property);

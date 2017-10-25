@@ -1,6 +1,6 @@
 import { PropertyMap } from "./mappings/property-map";
 
-export interface MapSourceOpts<TSrc, TDest> {
+export interface MapSourceOpts<TSrc> {
     (opt: MapSourceOptions<TSrc>): void;
 }
 

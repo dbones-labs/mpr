@@ -1,10 +1,10 @@
 import { PropertyMap } from "./mappings/property-map";
 
-export interface MapSourceOpts<TSrc> {
-    (opt: MapSourceOptions<TSrc>): void;
+export interface MapSourceOpts {
+    (opt: MapSourceOptions): void;
 }
 
-export class MapSourceOptions<TSrc> {
+export class MapSourceOptions {
 
     private _propertyMap: PropertyMap;
 

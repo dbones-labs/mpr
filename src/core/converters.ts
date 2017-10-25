@@ -4,6 +4,9 @@ import { TypeConverter } from "./type-converter";
 import { Types } from './types';
 
 
+/**
+ * internal registration for some basic type converters.
+ */
 export class Converts {
 
     getConverters() {
@@ -19,6 +22,12 @@ export class Converts {
 
             <TypeConverter>new DateToDateConverter(),
             <TypeConverter>new StringToDateConverter(),
+
+            <TypeConverter>new BooleanToBooleanConverter(),
+            <TypeConverter>new BooleanToStringConverter(),
+            <TypeConverter>new StringToBooleanConverter(),
+            <TypeConverter>new BooleanToNumberConverter(),
+            <TypeConverter>new NumberToBooleanConverter(),
 
             <TypeConverter>new ValueToValueConverter()
         ];
@@ -130,3 +139,48 @@ class StringToDateConverter implements TypeConverter {
     }
 }
 
+class BooleanToBooleanConverter implements TypeConverter {
+    sourceType: string = Types.boolean;
+    destinationType: string = Types.boolean;
+    execute(ctx: MappingContext) {
+        if (ctx.source == null) ctx.destination = null;
+        else ctx.destination = ctx.source;
+    }
+}
+
+
+class StringToBooleanConverter implements TypeConverter {
+    sourceType: string = Types.string;
+    destinationType: string = Types.boolean;
+    execute(ctx: MappingContext) {
+        if (ctx.source == null) ctx.destination = null;
+        else ctx.destination = ctx.source == "true";
+    }
+}
+
+class BooleanToStringConverter implements TypeConverter {
+    sourceType: string = Types.boolean;
+    destinationType: string = Types.string;
+    execute(ctx: MappingContext) {
+        if (ctx.source == null) ctx.destination = null;
+        else ctx.destination = ctx.source ? "true" : "false";
+    }
+}
+
+class BooleanToNumberConverter implements TypeConverter {
+    sourceType: string = Types.boolean;
+    destinationType: string = Types.number;
+    execute(ctx: MappingContext) {
+        if (ctx.source == null) ctx.destination = null;
+        else ctx.destination = ctx.source ? 1 : 0;
+    }
+}
+
+class NumberToBooleanConverter implements TypeConverter {
+    sourceType: string = Types.number;
+    destinationType: string = Types.boolean;
+    execute(ctx: MappingContext) {
+        if (ctx.source == null) ctx.destination = null;
+        else ctx.destination = ctx.source == 1;
+    }
+}

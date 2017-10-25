@@ -1,6 +1,6 @@
 {
   "name": "@dboneslabs/mpr",
-  "version": "0.0.1",
+  "version": "1.0.3",
   "description": "mapper lib, maps source to destination",
   "main": "index.js",
   "scripts": {

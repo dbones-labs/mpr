@@ -14,7 +14,7 @@ export class MapComponent {
     type: string;
     isArray: boolean;
 
-    getName(){
+    getName() {
         return (this.isArray)
             ? `${this.type}[]`
             : this.type;

@@ -4,10 +4,12 @@
 import { Dictionary } from "../../dictionary";
 import { PropertyMeta } from "./property-meta";
 import { CtorStrategy, AnonCtor, TypeCtor } from "../../strategies/ctor-strategy";
+import { MapComponent } from "../../core/map-information";
+import { Types } from "../../core/types";
 
 export class TypeMeta {
     
-        isAnon: boolean = false;
+        isAnon: boolean = true;
 
         /*
         //assume a declared type will have a fixed number of properties.
@@ -33,13 +35,22 @@ export class TypeMeta {
          * property name which is used for the Id, not the instance value.
          */
         id: string;
+
+        /**
+         * the base of this class.
+         */
+        baseType: string; 
     
         /**
-         * the collection of properties, keyed on a camelcase name
+         * the collection of properties, keyed on the name provided.
          */
         properties: Dictionary<PropertyMeta> = new Dictionary<PropertyMeta>();
-        propertiesRawName: Dictionary<PropertyMeta> = new Dictionary<PropertyMeta>();
-    
+
+        /**
+         *  the collection of properties, keyed on a camelcase name.
+         */
+        propertiesKeyedOnCamelCase: Dictionary<PropertyMeta> = new Dictionary<PropertyMeta>();
+   
     
         ctor: CtorStrategy = new AnonCtor();
 
@@ -50,29 +61,22 @@ export class TypeMeta {
             this.actualType = type;
         }
     
-        addProperty(name: string, processedName: string, type: string = null) {
-    
-            let value = this.namingConvention.convertToTarget(name);
-            let typeDetail: string = null
-            let actualType: PropertyType;
-            if (type = null) {
-                actualType = PropertyType.value
-            }
-            else if (type.indexOf('[]') > -1) {
-                typeDetail = type.replace('[]', '');
-                actualType = PropertyType.array;
-            }
-            else {
-                typeDetail = type;
-                actualType = PropertyType.object;
-            }
+        addProperty(name: string, processedName: string, type: string = Types.value) {
     
             let property: PropertyMeta = new PropertyMeta();
-            property.name = value;
-            property.type = actualType;
-            property.typeDetail = typeDetail;
-    
+            property.name = name;
+            property.type = type;
+            property.processedName = processedName;
+            let mapComponent = new MapComponent();
+            
+            if (type.indexOf('[]') > -1) {
+                type = type.replace('[]', '');
+                mapComponent.isArray = true;
+            }
+            
+            mapComponent.type = type;
     
             this.properties.set(name, property);
+            this.propertiesKeyedOnCamelCase.set(processedName, property);
         }
     }

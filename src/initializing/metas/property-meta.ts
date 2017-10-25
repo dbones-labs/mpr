@@ -3,6 +3,8 @@ import { MapComponent } from "../../core/map-information";
 export class PropertyMeta {
     
         name: string;
+
+        processedName: string;
     
         /**
          * if this property is an object

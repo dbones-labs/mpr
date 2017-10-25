@@ -4,7 +4,8 @@
   "description": "mapper lib, maps source to destination",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "runtests": "mocha ./test --colors --recursive",
+    "build": "tsc"
   },
   "repository": {
     "type": "git",

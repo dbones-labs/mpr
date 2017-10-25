@@ -29,27 +29,26 @@ enum Priority {
 class MapSetup implements Setup {
     configure(builder: Builder): void {
 
-        builder.addType('models.todo', Todo)
-            .addProperty('id', Types.string)
-            .addProperty('created', Types.date)
-            .addProperty('description', Types.string)
-            .addProperty('priority', Types.number);
+        builder.addType("models.todo", Todo)
+            .addProperty("id", Types.string)
+            .addProperty("created", Types.date)
+            .addProperty("description", Types.string)
+            .addProperty("priority", Types.number);
 
-        builder.addType('dto.todo')
-            .addProperty('id', Types.string)
-            .addProperty('created', Types.date)
-            .addProperty('description', Types.string)
-            .addProperty('priority', Types.number);
+        builder.addType("dto.todo")
+            .addProperty("id", Types.string)
+            .addProperty("created", Types.date)
+            .addProperty("description", Types.string)
+            .addProperty("priority", Types.number);
 
         builder.createMap("models.todo", "dto.todo");
         builder.createMap("dto.todo", "models.todo");
 
     }
-
 }
 
 
-describe('automap provided type information is supplied', () => {
+describe('automap - given type inforation is provided manually', () => {
 
     let mapperFactor = new MapperFactor();
     mapperFactor.addSetup(new MapSetup());
@@ -66,6 +65,29 @@ describe('automap provided type information is supplied', () => {
 
         let destination = mapper.map(source, "dto.todo");
 
+        expect(destination.id).to.equal(source.id);
+        expect(destination.created).to.equal(source.created);
+        expect(destination.description).to.equal(source.description);
+        expect(destination.priority).to.equal(source.priority);
+
+        done();
+
+    });
+
+
+    it("map simple anon to type", (done) => {
+
+        let source = {
+            id: "123",
+            created: new Date(2017, 09, 17),
+            description: "map a anon object to a known type",
+            priority: 2,
+            $type: "dto.todo"
+        }
+
+        let destination = mapper.map(source, "models.todo");
+
+        expect(destination.$type).to.equal("models.todo");
         expect(destination.id).to.equal(source.id);
         expect(destination.created).to.equal(source.created);
         expect(destination.description).to.equal(source.description);

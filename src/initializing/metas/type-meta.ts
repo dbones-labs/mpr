@@ -3,7 +3,7 @@
  */
 import { Dictionary } from "../../dictionary";
 import { PropertyMeta } from "./property-meta";
-import { CtorStrategy, AnonCtor, TypeCtor } from "../../strategies/ctor-strategy";
+import { CtorStrategy, AnonCtor, TypeCtor, Constructor } from "../../strategies/ctor-strategy";
 import { MapComponent } from "../../core/map-information";
 import { Types } from "../../core/types";
 
@@ -55,7 +55,7 @@ export class TypeMeta {
         ctor: CtorStrategy = new AnonCtor();
 
         actualType: Function;
-        setType(type: Function) {
+        setType(type: Constructor) {
             this.isAnon = false;
             this.ctor = new TypeCtor(type);
             this.actualType = type;

@@ -36,7 +36,7 @@ class MapSetup implements Setup {
 }
 
 
-describe('convert via using with typeconverter', () => {
+describe('type converter - provide a typeconverter at the type level', () => {
 
     let mapperFactor = new MapperFactor();
     mapperFactor.addSetup(new MapSetup());

@@ -4,6 +4,7 @@ import { Dictionary } from "../../dictionary";
 import { TypeMeta } from "../metas/type-meta";
 import { PropertyBuilder } from "../builders/property-builder";
 import { Configuration } from '../../configuration';
+import { Constructor } from '../../strategies/ctor-strategy';
 
 export class Builder {
 
@@ -22,7 +23,7 @@ export class Builder {
      * @param typeName the name of the type i.e. 'models.todo'
      * @param type the types FUNCTION
      */
-    addType(typeName: string, type: Function = null): PropertyBuilder {
+    addType(typeName: string, type: Constructor = null): PropertyBuilder {
         let meta = new TypeMeta(typeName);
 
         if (type != null) {

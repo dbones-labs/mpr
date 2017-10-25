@@ -9,14 +9,22 @@ export class AnonCtor implements CtorStrategy {
 }
 
 export class TypeCtor implements CtorStrategy {
-    _ctor: Function;
+    _ctor: Constructor;
 
-    constructor(ctor: Function) {
+    constructor(ctor: Constructor) {
         this._ctor = ctor;
     }
 
     createInstance(): any {
-        return this._ctor();
+        return new this._ctor();
     }
 
+}
+
+
+/**
+ * a class/type which has a parameter-less constructor.
+ */
+export interface Constructor {
+    new (): any;
 }

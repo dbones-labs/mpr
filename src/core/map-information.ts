@@ -12,7 +12,7 @@ export class MapInformation {
 
 export class MapComponent {
     type: string;
-    isArray: boolean;
+    isArray: boolean = false;
 
     getName() {
         return (this.isArray)

@@ -8,7 +8,7 @@ export interface TypeConverter {
     sourceType: string;
     destinationType: string;
 
-    execute(context: MappingContext): any;
+    execute(context: MappingContext): void;
 }
 
 

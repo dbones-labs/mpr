@@ -73,7 +73,7 @@ class ValueToValueConverter implements TypeConverter {
     sourceType: string = Types.value;
     destinationType: string = Types.value;
     execute(context: MappingContext) {
-        return context.source;
+        context.destination = context.source;
     }
 
 }
@@ -83,7 +83,7 @@ class StringToStringConverter implements TypeConverter {
     sourceType: string = Types.string;
     destinationType: string = Types.string;
     execute(ctx: MappingContext) {
-        return ctx.source;
+        ctx.destination = ctx.source;
     }
 }
 
@@ -91,7 +91,7 @@ class NumberToNumberConverter implements TypeConverter {
     sourceType: string = Types.number;
     destinationType: string = Types.number;
     execute(ctx: MappingContext) {
-        return ctx.source;
+        ctx.destination = ctx.source;
     }
 }
 
@@ -99,8 +99,8 @@ class StringToNumberConverter implements TypeConverter {
     sourceType: string = Types.string;
     destinationType: string = Types.number;
     execute(ctx: MappingContext) {
-        if (ctx.source == null) return null;
-        return parseInt(ctx.source);
+        if (ctx.source == null) ctx.destination = null;
+        else ctx.destination = parseInt(ctx.source);
     }
 }
 
@@ -108,8 +108,8 @@ class NumberToStringConverter implements TypeConverter {
     sourceType: string = Types.number;
     destinationType: string = Types.string;
     execute(ctx: MappingContext) {
-        if (ctx.source == null) return null;
-        return ctx.source.toString();
+        if (ctx.source == null) ctx.destination = null;
+        else ctx.destination = ctx.source.toString();
     }
 }
 
@@ -117,7 +117,7 @@ class DateToDateConverter implements TypeConverter {
     sourceType: string = Types.date;
     destinationType: string = Types.date;
     execute(ctx: MappingContext) {
-        return ctx.source;
+        ctx.destination = ctx.source;
     }
 }
 
@@ -125,8 +125,8 @@ class StringToDateConverter implements TypeConverter {
     sourceType: string = Types.string;
     destinationType: string = Types.date;
     execute(ctx: MappingContext) {
-        if (ctx.source == null) return null;
-        return new Date(ctx.source);
+        if (ctx.source == null) ctx.destination = null;
+        else ctx.destination = new Date(ctx.source);
     }
 }
 

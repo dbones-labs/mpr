@@ -21,8 +21,11 @@ export class DefaultMapCompiler implements MapCompiler {
 
         let setters: any = {};
 
+
+        //create default mappings from the property names.
         destinationMeta.propertiesKeyedOnCamelCase.keys.forEach(propertyName => {
 
+            //note that camel case will be used internally.
             let destProperty = destinationMeta.propertiesKeyedOnCamelCase.get(propertyName);
             let srcProperty = sourceMeta.propertiesKeyedOnCamelCase.get(propertyName);
 
@@ -32,6 +35,7 @@ export class DefaultMapCompiler implements MapCompiler {
             //create delegate for the src => destination 
             setters[destProperty.name] = <Setter>((ctx: MappingContext) => {
                 
+                //we know the main key value, we can just create it hear.
                 var info = new MapInformation(srcProperty.mapComponent,destProperty.mapComponent);
 
                 var innerCtx = new MappingContext();
@@ -40,8 +44,13 @@ export class DefaultMapCompiler implements MapCompiler {
                 innerCtx.mapInformation = info;
                 innerCtx.mapper = ctx.mapper;
 
+                //this will treat a partial source as a 'update/delta'.
+                if(innerCtx.source === undefined) return;
+
+                //map the single property.
                 ctx.mapper.mapIt(innerCtx);
 
+                //need to ensure that the destination is set.
                 ctx.destination[destProperty.name] = innerCtx.destination;
 
             });

@@ -17,7 +17,7 @@ export class MapFromOptions<TSrc> {
      * @param source the source where we can source the value from.
      * @param sourceName the name of the source, this is only need if you passed a delegae in for the source and we a mappping to an Anon type.
      */
-    mapFrom(source: string | ((srcInstnace: TSrc | any) => any), sourceName: string = null) {
+    mapFrom(source: string | ((srcInstnace: TSrc ) => any), sourceName: string = null) {
 
         if (typeof source === 'string') {
             this._propertyMap.sourceGetter = (instance: any) => {
@@ -36,9 +36,9 @@ export class MapFromOptions<TSrc> {
      * a function which will provide the value.
      * @param func a func which will result in a value you want.
      */
-    using(func: () => any): void {
+    using(func: (src: TSrc) => any): void {
         this._propertyMap.sourceGetter = (instance: any) => {
-            return func();
+            return func(instance);
         };
     }
 

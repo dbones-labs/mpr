@@ -57,9 +57,23 @@ export class DefaultMapCompiler implements MapCompiler {
 
         });
 
-        // map.propertyMaps.forEach(map => {
-        //     map.
-        // });
+        //apply the mapping overrides from the dsl.
+        map.propertyMaps.forEach(map => {
+            
+            if (map.ignoreDestination) {
+                delete setters[map.destinationName];
+                return;
+            }
+
+            let destPropertyMeta = destinationMeta.properties.get(map.destinationName);
+
+            setters[map.destinationName] = <Setter>((ctx: MappingContext) => { 
+                let source = map.sourceGetter(ctx.source);
+                let result = ctx.mapper.map(source, destPropertyMeta.mapComponent.getName());
+                map.destinationSetter(ctx.destination, result);
+            });
+
+        });
 
         let settersArray = Object.keys(setters).map(property=>{
             return setters[property];            

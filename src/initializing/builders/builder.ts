@@ -42,7 +42,7 @@ export class Builder {
      */
     createMap<TSrc, TDest>(sourceType: string, destinationType: string): FluentTypeMapping<TSrc, TDest> {
         let map = new TypeMap(sourceType, destinationType);
-        let config = new FluentTypeMapping(map);
+        let config = new FluentTypeMapping<TSrc, TDest>(map);
         this.mappings.push(map);
         return config;
     }

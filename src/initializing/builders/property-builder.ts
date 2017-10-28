@@ -1,6 +1,7 @@
 import { TypeMeta } from "../metas/type-meta";
 import { Configuration } from "../../configuration";
 import { Types } from "../../core/types";
+import { Constructor } from "../../strategies/ctor-strategy";
 
 export class PropertyBuilder {
 
@@ -25,14 +26,18 @@ export class PropertyBuilder {
         return this;
     }
 
-    //TODO: implement
     /**
-     * not implemented yet
      * annotate your class and this method will add the meta to the mapper.
      */
     scanForAttributes(): PropertyBuilder {
-        throw new Error('not implemented yet, scanForAttributes');
-        //return this;
+        let type = <Constructor>this._typeMeta.actualType;
+        if(type == null) throw new Error("you need to set a type to scan");
+
+        this._configuration.extractMetadata.getProperties(type).forEach(property => {
+            this.addProperty(property.name, property.typeName);
+        });
+
+        return this;
     }
 
 }

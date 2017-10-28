@@ -4,6 +4,7 @@ import { TypeStrategy, DefaultTypeStrategy } from "./strategies/type-strategy";
 import { NamingConvention, CamelCaseNamingConvention } from "./strategies/naming-convention";
 import { TypeConverter } from './core/type-converter';
 import { Converts } from './core/converters';
+import { ExtractMetadata } from './annotations/extract-metadata';
 
 export class Configuration {
 
@@ -11,5 +12,6 @@ export class Configuration {
     namingConvention: NamingConvention = new CamelCaseNamingConvention();
     typeConverterLocator: TypeConverterLocator = new DefaultTypeConverterLocator();
     typeConverters: TypeConverter[] = new Converts().getConverters();
+    extractMetadata: ExtractMetadata = new ExtractMetadata();
 
 }

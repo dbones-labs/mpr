@@ -1,3 +1,6 @@
+/**
+ * this is basically the key which is used to find the correct TypeConverter
+ */
 export class MapInformation {
 
     constructor(src: MapComponent, dest: MapComponent) {

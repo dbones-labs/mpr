@@ -3,6 +3,9 @@ import { TypeConverter } from "./type-converter";
 import { Mapper } from "../Mapper";
 import { MappingContext } from "./mapping-context";
 
+/**
+ * if possible implement the TypeConverter interface directly
+ */
 export abstract class TypeConverterBase<TSrc, TDest> implements TypeConverter {
 
     abstract sourceType: string;

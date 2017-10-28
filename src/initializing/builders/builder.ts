@@ -23,7 +23,13 @@ export class Builder {
      * @param typeName the name of the type i.e. 'models.todo'
      * @param type the types FUNCTION
      */
-    addType(typeName: string, type: Constructor = null): PropertyBuilder {
+    addType(typeName: string | Constructor, type: Constructor = null): PropertyBuilder {
+
+        if(typeof typeName != "string") {
+            type = <Constructor>typeName;
+            typeName = <string>(<any>typeName).$$type;
+        }
+
         let meta = new TypeMeta(typeName);
 
         if (type != null) {
@@ -40,7 +46,16 @@ export class Builder {
      * @param sourceType the source type, i.e. 'models.Todo'
      * @param destinationType the destination type, i.e. 'resource.todo'
      */
-    createMap<TSrc, TDest>(sourceType: string, destinationType: string): FluentTypeMapping<TSrc, TDest> {
+    createMap<TSrc, TDest>(sourceType: string | Constructor, destinationType: string | Constructor): FluentTypeMapping<TSrc, TDest> {
+
+        if(typeof sourceType != "string") {
+            sourceType = <string>(<any>sourceType).$$type;
+        }
+
+        if(typeof destinationType != "string") {
+            destinationType = <string>(<any>destinationType).$$type;
+        }
+
         let map = new TypeMap(sourceType, destinationType);
         let config = new FluentTypeMapping<TSrc, TDest>(map);
         this.mappings.push(map);
@@ -48,3 +63,4 @@ export class Builder {
     }
 
 }
+

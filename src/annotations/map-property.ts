@@ -4,12 +4,12 @@ import { ReflectMetadata } from "./reflect";
 
 export function mapProperty(type?: string| Constructor): PropertyDecorator {
     return (target, key) => {
-        let type = ReflectMetadata.getTypeData(<Constructor>target) 
+        let type = ReflectMetadata.getTypeData(target.constructor) 
             || <Type>{
                 properties: {}
             };
         
-        let metaData = ReflectMetadata.getPropertyData(<Constructor>target, <string>key);
+        let metaData = ReflectMetadata.getPropertyData(<any>target, <string>key);
         let metaType = metaData.name.toLowerCase();
 
         let typeName = type == null || typeof type == "string" ? type : (<any>type).$$type;
@@ -30,6 +30,6 @@ export function mapProperty(type?: string| Constructor): PropertyDecorator {
             name: key
         };
 
-        return ReflectMetadata.setTypeData(<Constructor>target, type);
+        return ReflectMetadata.setTypeData(target.constructor, type);
     }
 }

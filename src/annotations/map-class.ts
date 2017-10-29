@@ -9,9 +9,12 @@ import { ReflectMetadata } from "./reflect";
 export function mapClass(typeName: string): ClassDecorator {
     return (target: Function) => {
 
+
+        let type: Type = ReflectMetadata.getTypeData(<Constructor>target);
+
         let t2 = classDecorator<any>(target, typeName);
 
-        let type: Type = ReflectMetadata.getTypeData(<Constructor>target)
+        type = type 
             || ReflectMetadata.getTypeData(t2)
             || <Type>{};
 

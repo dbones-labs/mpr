@@ -11,10 +11,6 @@ export class ReflectMetadata {
     }
 
     static getTypeData(type: object): any {
-
-        let key = reflect.getMetadataKeys(type);
-
-        console.log(key);
         return reflect.getMetadata(AnnotationKeys.mapAnnotation, type);
     }
 

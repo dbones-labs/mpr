@@ -1,3 +1,3 @@
 export class AnnotationKeys  {
-    static mapAnnotation = "mpr.Annotation";
+    static mapAnnotation = Symbol("mpr.Annotation");
 }

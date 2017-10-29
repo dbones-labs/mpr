@@ -6,11 +6,11 @@ var reflect = Reflect;
 
 //pure work around.
 export class ReflectMetadata {
-    static setTypeData(type: Constructor, value: any): any {
+    static setTypeData(type: object, value: any): any {
         reflect.defineMetadata(AnnotationKeys.mapAnnotation, value, type);
     }
 
-    static getTypeData(type: Constructor): any {
+    static getTypeData(type: object): any {
 
         let key = reflect.getMetadataKeys(type);
 

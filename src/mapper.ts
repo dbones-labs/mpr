@@ -1,3 +1,4 @@
+import {Constructor} from './strategies/ctor-strategy';
 import { MappingContext } from "./core/mapping-context";
 
 /**
@@ -10,7 +11,7 @@ export interface Mapper {
      * @param source instance of the source
      * @param destinationType the name of the destination type
      */
-    map(source: any, destinationType: string) : any;
+    map(source: any, destinationType: string | Constructor) : any;
 
     /**
      * (under development) maps the source state to an existing desintation instance

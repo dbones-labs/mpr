@@ -26,7 +26,12 @@ export class DefaultTypeConverter implements TypeConverter {
 
         this.setters.forEach(setter => {
             let ctx = context;
-            setter(ctx);
+            try {
+                setter(ctx);    
+            } catch (error) {
+                throw new Error(`failed to map ${this.sourceType} => ${this.destinationType}, innerException: ${error}`);
+            }
+            
         });
 
     }

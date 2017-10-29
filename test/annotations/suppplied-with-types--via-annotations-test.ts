@@ -25,8 +25,11 @@ class MapSetup implements Setup {
         builder.addType("dto.person")
             .addProperty("name", Types.string);
 
-        builder.createMap(Todo, "dto.todo")
+        builder.createMap(Todo, "dto.todo");
         builder.createMap("dto.todo", Todo);
+
+        builder.createMap(Person, "dto.person");
+        builder.createMap("dto.person", Person);
 
 
     }
@@ -49,6 +52,8 @@ describe('automap - given type inforation is provided by annotations', () => {
         source.priority = Priority.medium;
         source.comments.push("comment 1");
         source.comments.push("comment 2");
+        source.owner = new Person();
+        source.owner.name = "dave";
 
         let destination = mapper.map(source, "dto.todo");
 
@@ -56,6 +61,9 @@ describe('automap - given type inforation is provided by annotations', () => {
         expect(destination.created).to.equal(source.created);
         expect(destination.description).to.equal(source.description);
         expect(destination.priority).to.equal(source.priority);
+        expect(destination.comments[0]).to.equal("comment 1");
+        expect(destination.comments[1]).to.equal("comment 2");
+        expect(destination.owner.name).to.equal(source.owner.name);
 
         done();
 
@@ -70,16 +78,21 @@ describe('automap - given type inforation is provided by annotations', () => {
             description: "map a anon object to a known type",
             priority: 2,
             comments: ["comment a","comment b"],
-            $type: "dto.todo"
+            $type: "dto.todo",
+            owner: {
+                name: "bob",
+                $type: "dto.person"
+            }
         }
 
-        let destination = mapper.map(source, "models.todo");
+        let destination = mapper.map(source, Todo);
 
         expect(destination.$type).to.equal("models.todo");
         expect(destination.id).to.equal(source.id);
         expect(destination.created).to.equal(source.created);
         expect(destination.description).to.equal(source.description);
         expect(destination.priority).to.equal(source.priority);
+        expect(destination.owner.name).to.equal(source.owner.name)
 
         done();
 

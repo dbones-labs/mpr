@@ -5,6 +5,7 @@ import { MappingContext } from "./core/mapping-context";
 import { TypeConverter } from "./core/type-converter";
 import { TypeConverterLocator } from "./core/type-converter-locator";
 import { TypeReflection, DefaultTypeReflection } from "./strategies/type-reflection";
+import { Constructor } from './strategies/ctor-strategy';
 
 export class JsMapper implements AdvancedMapper {
 
@@ -28,12 +29,17 @@ export class JsMapper implements AdvancedMapper {
     }
 
 
-    map(source: any, destinationType: string): any {
+    map(source: any, destinationType: string | Constructor): any {
         if (source == null) return source;
         if (destinationType == null) throw new Error("destinationType is null");
 
+        if(typeof destinationType != "string") {
+            destinationType = (<any>destinationType).$$type
+        }
+
+
         let sourceType = this._typeReflection.getType(source, this._configuration.typeStrategy);
-        let mapLookup = this._typeConverterLocator.GetMapLookup(sourceType, destinationType);
+        let mapLookup = this._typeConverterLocator.GetMapLookup(sourceType, <string>destinationType);
         let ctx = this.createContext(source, null, mapLookup);
 
         this.mapIt(ctx);

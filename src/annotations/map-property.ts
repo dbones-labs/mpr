@@ -4,7 +4,7 @@ import { ReflectMetadata } from "./reflect";
 
 export function mapProperty(type?: string| Constructor): PropertyDecorator {
     return (target, key) => {
-        let type = ReflectMetadata.getTypeData(target.constructor) 
+        let t = ReflectMetadata.getTypeData(target.constructor) 
             || <Type>{
                 properties: {}
             };
@@ -22,7 +22,7 @@ export function mapProperty(type?: string| Constructor): PropertyDecorator {
             typeName = metaType;
         }
         
-        type.properties[key] = <Property>{
+        t.properties[key] = <Property>{
             metaData: metaData,
             metaType: metaType,
             suppliedType: type,
@@ -30,6 +30,6 @@ export function mapProperty(type?: string| Constructor): PropertyDecorator {
             name: key
         };
 
-        return ReflectMetadata.setTypeData(target.constructor, type);
+        return ReflectMetadata.setTypeData(target.constructor, t);
     }
 }

@@ -7,12 +7,27 @@ var clean = require('gulp-clean');
 
 
 var tsProject = ts.createProject('tsconfig.json');
+var tsProjectAmd = ts.createProject('tsconfig.amd.json');
+var tsProjectSystem = ts.createProject('tsconfig.system.json');
 
 gulp.task('default', ['prep'], function () { });
 
 gulp.task('compile', function () {
     return tsProject.src()
-        .pipe(tsProject());
+        .pipe(tsProject())
+        .pipe(gulp.dest('./'));
+});
+
+gulp.task('compile-amd', ['compile-system'], function () {
+    return tsProjectAmd.src()
+        .pipe(tsProjectAmd())
+        .pipe(gulp.dest('./dist/amd'));
+});
+
+gulp.task('compile-system', ["clean"], function () {
+    return tsProjectSystem.src()
+        .pipe(tsProjectSystem())
+        .pipe(gulp.dest('./dist/system'));
 });
 
 
@@ -23,16 +38,20 @@ gulp.task('test', ['compile'], function () {
         }));
 });
 
-gulp.task('prep', ['prep-clean'], function () {
-    return gulp.src(["src/**/*.js", "src/**/*.d.ts", "!gulpfile.js", "package.json", "readme.md"])
+gulp.task('prep', ['prep-commonjs'], function () {
+    return gulp.src(["package.json", "readme.md"])
         .pipe(gulp.dest('dist'));
 });
 
-
-gulp.task('prep-clean', ['test'], function () {
-   return gulp.src('dist', {read: false})
-       .pipe(clean());
+gulp.task('prep-commonjs', ['test'], function () {
+    return gulp.src(["src/**/*.js", "src/**/*.d.ts", "!gulpfile.js"])
+        .pipe(gulp.dest('./dist/commonjs'));
 });
+
+gulp.task('clean', function () {
+    return gulp.src('./dist', {read: false})
+        .pipe(clean());
+     });
 
 gulp.task('bump', ['prep'], function () {
     return gulp.src('./dist/package.json')

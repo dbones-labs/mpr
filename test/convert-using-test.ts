@@ -1,5 +1,5 @@
 import 'mocha';
-import { MapperFactor } from "../src/mapper-factory";
+import { MapperFactory } from "../src/mapper-factory";
 import { Setup } from "../src/initializing/Setup";
 import { TypeConverterBase } from "../src/core/type-converter-base";
 import { Mapper } from "../src/Mapper";
@@ -38,7 +38,7 @@ class MapSetup implements Setup {
 
 describe('type converter - provide a typeconverter at the type level', () => {
 
-    let mapperFactor = new MapperFactor();
+    let mapperFactor = new MapperFactory();
     mapperFactor.addSetup(new MapSetup());
 
     let mapper = mapperFactor.createMapper();

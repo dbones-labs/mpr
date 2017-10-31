@@ -22,6 +22,7 @@ export class Converts {
 
             <TypeConverter>new DateToDateConverter(),
             <TypeConverter>new StringToDateConverter(),
+            <TypeConverter>new DateToStringConverter(),
 
             <TypeConverter>new BooleanToBooleanConverter(),
             <TypeConverter>new BooleanToStringConverter(),
@@ -127,6 +128,17 @@ class DateToDateConverter implements TypeConverter {
     destinationType: string = Types.date;
     execute(ctx: MappingContext) {
         ctx.destination = ctx.source;
+    }
+}
+
+
+//
+class DateToStringConverter implements TypeConverter {
+    sourceType: string = Types.date;
+    destinationType: string = Types.string;
+    execute(ctx: MappingContext) {
+        if (ctx.source == null) ctx.destination = null;
+        else ctx.destination = (<Date>(ctx.source)).toISOString();
     }
 }
 

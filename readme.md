@@ -8,13 +8,13 @@ Give it a whirl, it may just work for you.
 
 * auto-mapping (requires registering of typeMeta)
 * annotations (Decorators) support
-* compete POJO support (alternative to annotations)
+* complete POJO support (alternative to annotations)
 * support for es6 classes, and anon types **{ name: "anon object" }**
 * supports for arrays 
 * supports mapping complex types (no support for bi-directional)
 * mapping overriding via dsl (loosely based on Automapper from .NET)
 * modular setup
-* many places where default behavior can be overriden.
+* many places where default behavior can be overridden.
 
 ##quick code example:
 
@@ -115,7 +115,7 @@ remember to reuse your mapper instance, its built that way.
 
 ```javascript
 //use the factory, to setup your mappings
-let mapperFactor = new MapperFactor();
+let mapperFactory = new MapperFactory();
 mapperFactor.addSetup(new MapSetup());
 
 //create the mapper from the factory

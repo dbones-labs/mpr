@@ -3,6 +3,7 @@
  */
 export class PropertyMap {
     
+    flatternSourceToDestination = false;
     sourceName: string;
     sourceGetter: (instance: any) => any;
     ignoreSource: boolean = false;

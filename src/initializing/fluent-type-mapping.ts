@@ -2,6 +2,7 @@ import { TypeConverter } from "../core/type-converter";
 import { PropertyMap } from "./mappings/property-map";
 import { TypeMap } from "./mappings/type-map";
 import { MapFromOpts, MapFromOptions } from "./map-from-options";
+import { MapSourceOpts, MapSourceOptions } from "./map-source-options";
 
 export class FluentTypeMapping<TSrc, TDest> {
 
@@ -29,13 +30,24 @@ export class FluentTypeMapping<TSrc, TDest> {
     }
 
 
-    // forSource(sourceProperty: string, opts: MapSourceOpts<TSrc, TDest>): FluentTypeMapping<TSrc, TDest> {
-    //     let propertyMap = new PropertyMap();
-    //     let options = new  <TSrc, TDest>(propertyMap);
-    //     opts(options);
-    //     this._typeMapping.sourcePropertyMaps.push(propertyMap);
-    //     return this;
-    // }
+    /**
+     * apply source directive mapping
+     * @param sourceProperty the source property of interest
+     * @param opts what you want to do with the source.
+     */
+    withSource(sourceProperty: string | ((src: TSrc) => any), opts: MapSourceOpts): FluentTypeMapping<TSrc, TDest> {
+
+        let propertyMap = new PropertyMap();
+
+        propertyMap.sourceGetter = (typeof sourceProperty == "string")
+            ? (instance: any) => instance[<string>sourceProperty]
+            : sourceProperty;
+
+        let options = new MapSourceOptions(propertyMap);
+        opts(options);
+        this._typeMapping.sourcePropertyMaps.push(propertyMap);
+        return this;
+    }
 
     /**
      * supply a TypeConverter to use.

@@ -60,6 +60,8 @@ export class DefaultMapCompiler implements MapCompiler {
         //apply the mapping overrides from the dsl.
         map.propertyMaps.forEach(map => {
             
+            if(map.destinationName == null) return;
+
             if (map.ignoreDestination) {
                 delete setters[map.destinationName];
                 return;
@@ -77,6 +79,22 @@ export class DefaultMapCompiler implements MapCompiler {
 
         let settersArray = Object.keys(setters).map(property=>{
             return setters[property];            
+        });
+
+        //scan for non destinational mappings
+        map.propertyMaps.forEach(map => {
+
+            if(map.destinationName != null) return;
+
+            if(!map.flatternSourceToDestination) return;
+
+            let setter: Setter = <Setter>((ctx: MappingContext) => {
+                let source = map.sourceGetter(ctx.source);
+                ctx.mapper.map(source, ctx.destination);
+            });
+
+            settersArray.push(setter);
+
         });
 
         return new DefaultTypeConverter(sourceMeta.name, destinationMeta.name, destinationMeta.ctor, settersArray);

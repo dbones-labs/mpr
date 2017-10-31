@@ -16,7 +16,7 @@ export class MapSourceOptions {
     /**
      * this source value will be ignored
      */
-    ignore() {
-        this._propertyMap.ignoreSource = true;
+    flattern() {
+        this._propertyMap.flatternSourceToDestination = true;
     }
 }

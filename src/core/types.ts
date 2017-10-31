@@ -1,3 +1,5 @@
+import { Constructor } from "../strategies/ctor-strategy";
+
 export class Types {
 
     static string = "string";
@@ -8,7 +10,13 @@ export class Types {
     static object = "object";
     static value = "value";
 
+    static asArray(type: string | Constructor){
+        return typeof type == "string" ? `${type}[]` : (<any>type).$$type;
+    }
+
+
+    /**plesae use asArray() */
     static AsArray(type: string){
-        return `${type}[]`;
+        return this.asArray(type);
     }
 }

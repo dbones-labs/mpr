@@ -1,5 +1,5 @@
 import 'mocha';
-import { MapperFactor } from "../src/mapper-factory";
+import { MapperFactory } from "../src/mapper-factory";
 import { Setup } from "../src/initializing/Setup";
 
 import { expect } from "chai";
@@ -50,7 +50,7 @@ class MapSetup implements Setup {
 
 describe('automap - given type inforation is provided manually', () => {
 
-    let mapperFactor = new MapperFactor();
+    let mapperFactor = new MapperFactory();
     mapperFactor.addSetup(new MapSetup());
 
     let mapper = mapperFactor.createMapper();

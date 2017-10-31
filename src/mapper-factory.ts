@@ -5,7 +5,7 @@ import { Configuration } from "./configuration";
 import { DefaultMapCompiler, MapCompiler } from "./strategies/map-compiler";
 import { Builder } from "./initializing/builders/builder";
 
-export class MapperFactor {
+export class MapperFactory {
 
     private _builder: Builder;
     private _config: Configuration = new Configuration();

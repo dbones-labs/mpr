@@ -38,11 +38,13 @@ export class TypeMap {
     /**
      * create a mappping
      * @param source the source type
-     * @param target the target type
+     * @param destination the target type
      */
-    constructor(source: string, target: string) {
+    constructor(source: string, destination: string) {
+        if(source == null || source == '') throw new Error('source must be provided');
+        if(destination == null || destination == '') throw new Error('destination must be provided');
         this.source = source;
-        this.destination = target;
+        this.destination = destination;
     }
 
 }

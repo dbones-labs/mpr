@@ -66,7 +66,7 @@ describe('automap - given type inforation is provided manually', () => {
         let destination = mapper.map(source, "dto.todo");
 
         expect(destination.id).to.equal(source.id);
-        expect(destination.created).to.equal(source.created);
+        expect(destination.created.getTime()).to.equal(source.created.getTime());
         expect(destination.description).to.equal(source.description);
         expect(destination.priority).to.equal(source.priority);
 
@@ -89,7 +89,7 @@ describe('automap - given type inforation is provided manually', () => {
 
         expect(destination.$type).to.equal("models.todo");
         expect(destination.id).to.equal(source.id);
-        expect(destination.created).to.equal(source.created);
+        expect(destination.created.getTime()).to.equal(source.created.getTime());
         expect(destination.description).to.equal(source.description);
         expect(destination.priority).to.equal(source.priority);
 
@@ -106,10 +106,10 @@ describe('automap - given type inforation is provided manually', () => {
         source.priority = Priority.medium;
 
         let source2 = new Todo();
-        source.id = "1233";
-        source.created = new Date(2017, 09, 18);
-        source.description = "create a mapper 123";
-        source.priority = Priority.low;
+        source2.id = "1233";
+        source2.created = new Date(2017, 09, 18);
+        source2.description = "create a mapper 123";
+        source2.priority = Priority.low;
 
 
         let destination = mapper.map([source, source2], "dto.todo[]");
@@ -117,12 +117,12 @@ describe('automap - given type inforation is provided manually', () => {
         expect(Array.isArray(destination)).to.equal(true);
         expect(destination.length).to.equal(2);
         expect(destination[0].id).to.equal(source.id);
-        expect(destination[0].created).to.equal(source.created);
+        expect(destination[0].created.getTime()).to.equal(source.created.getTime());
         expect(destination[0].description).to.equal(source.description);
         expect(destination[0].priority).to.equal(source.priority);
 
         expect(destination[1].id).to.equal(source2.id);
-        expect(destination[1].created).to.equal(source2.created);
+        expect(destination[1].created.getTime()).to.equal(source2.created.getTime());
         expect(destination[1].description).to.equal(source2.description);
         expect(destination[1].priority).to.equal(source2.priority);
 

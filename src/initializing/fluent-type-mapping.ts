@@ -42,6 +42,8 @@ export class FluentTypeMapping<TSrc, TDest> {
         propertyMap.sourceGetter = (typeof sourceProperty == "string")
             ? (instance: any) => instance[<string>sourceProperty]
             : sourceProperty;
+        
+        propertyMap.destinationType = this._typeMapping.destination;
 
         let options = new MapSourceOptions(propertyMap);
         opts(options);

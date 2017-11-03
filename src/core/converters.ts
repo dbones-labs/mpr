@@ -127,7 +127,7 @@ class DateToDateConverter implements TypeConverter {
     sourceType: string = Types.date;
     destinationType: string = Types.date;
     execute(ctx: MappingContext) {
-        ctx.destination = ctx.source;
+        ctx.destination = new Date((<Date>(ctx.source)).getTime());
     }
 }
 

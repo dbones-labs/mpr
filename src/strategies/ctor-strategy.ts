@@ -8,6 +8,14 @@ export class AnonCtor implements CtorStrategy {
     }
 }
 
+export class ArrayCtor implements CtorStrategy {
+    createInstance(): any {
+        return [];
+    }
+}
+
+
+
 export class TypeCtor implements CtorStrategy {
     _ctor: Constructor;
 

@@ -1,4 +1,7 @@
 import 'mocha';
+import { MapComponent, MapInformation } from '../src/core/map-information';
+import { MappingContext } from '../src/core/mapping-context';
+import { AdvancedMapper } from '../src/mapper';
 import { MapperFactory } from "../src/mapper-factory";
 import { Setup } from "../src/initializing/Setup";
 
@@ -13,20 +16,20 @@ class TodoResourceCollection {
 
     Data: TodoResource[];
 
-    $type= 'resource.collection<todo>'
+    $type = 'resource.collection.todo'
 }
 
 
 class TodoResource {
     Id: string;
-    
+
     Created: string;
 
     Description: string;
 
     Priority: number;
 
-    $type= 'resource.todo'
+    $type = 'resource.todo'
 }
 
 @mapClass('model.todo')
@@ -54,7 +57,7 @@ enum Priority {
 
 class resourceTypes {
     static todoResourceType = "resource.todo";
-    static todoResourceCollectionType = "resource.collection<todo>";
+    static todoResourceCollectionType = "resource.collection.todo";
 }
 
 class MapSetup implements Setup {
@@ -63,27 +66,25 @@ class MapSetup implements Setup {
         //register types
         builder.addType(Todo).scanForAttributes();
 
-        
-
         builder.addType(resourceTypes.todoResourceType, TodoResource)
             .addProperty("Id", Types.string)
-            .addProperty("Created", Types.date)
+            .addProperty("Created", Types.string)
             .addProperty("Description", Types.string)
             .addProperty("Priority", Types.number);
-        
+
         builder.addType(resourceTypes.todoResourceCollectionType, TodoResourceCollection)
-            .addProperty("Data", Types.asArray("resource.todo"));
+            .addProperty("Data", Types.asArray(resourceTypes.todoResourceType));
 
         //register maps
         builder.createMap<TodoResourceCollection, Todo[]>(resourceTypes.todoResourceCollectionType, Types.asArray(Todo))
             .withSource(src => src.Data, opt => opt.flattern());
 
-        builder.createMap(TodoResource, Todo);
+        builder.createMap(resourceTypes.todoResourceType, Todo);
 
         builder.createMap<Todo[], TodoResourceCollection>(Types.asArray(Todo), resourceTypes.todoResourceCollectionType)
             .forMember("Data", opt => opt.mapFrom(src => src));
 
-            builder.createMap(Todo, TodoResource);    
+        builder.createMap(Todo, resourceTypes.todoResourceType);
     }
 }
 
@@ -94,9 +95,11 @@ describe('flatten', () => {
     mapperFactor.addSetup(new MapSetup());
 
     let mapper = mapperFactor.createMapper();
+    let advancedMapper = <AdvancedMapper>mapper;
 
     it("map models collection to a resouce custom collection", (done) => {
 
+        
         let source = new Todo();
         source.id = "123";
         source.created = new Date(2017, 09, 17);
@@ -104,18 +107,40 @@ describe('flatten', () => {
         source.priority = Priority.medium;
 
         let source2 = new Todo();
-        source.id = "2332";
-        source.created = new Date(2007, 09, 17);
-        source.description = "hmmmm";
-        source.priority = Priority.low;
+        source2.id = "2332";
+        source2.created = new Date(2007, 09, 17);
+        source2.description = "hmmmm";
+        source2.priority = Priority.low;
 
-        let destination = mapper.map([source, source2], resourceTypes.todoResourceCollectionType);
+        let src = new MapComponent();
+        src.type = (<any>Todo).$$type;
+        src.isArray = true;
+        
+        let dest = new MapComponent()
+        dest.type = resourceTypes.todoResourceCollectionType;
+
+        let info = new MapInformation(src, dest);
+
+        let context = new MappingContext();
+        context.source = [source, source2];
+        context.mapInformation = info;
+        context.mapper = advancedMapper;
+        
+        advancedMapper.mapIt(context);
+        let destination = context.destination;
 
         expect(destination.Data.length).to.equal(2);
         expect(destination.Data[0].Id).to.equal(source.id);
         expect(destination.Data[0].Created).to.equal(source.created.toISOString());
         expect(destination.Data[0].Description).to.equal(source.description);
         expect(destination.Data[0].Priority).to.equal(source.priority);
+
+
+        expect(destination.Data[1].Id).to.equal(source2.id);
+        expect(destination.Data[1].Created).to.equal(source2.created.toISOString());
+        expect(destination.Data[1].Description).to.equal(source2.description);
+        expect(destination.Data[1].Priority).to.equal(source2.priority);
+
 
         done();
 
@@ -131,10 +156,10 @@ describe('flatten', () => {
         source.Priority = 1;
 
         let source2 = new TodoResource();
-        source.Id = "2332";
-        source.Created = new Date(2007, 09, 17).toISOString();
-        source.Description = "hmmmm";
-        source.Priority = 0;
+        source2.Id = "2332";
+        source2.Created = new Date(2007, 09, 17).toISOString();
+        source2.Description = "hmmmm";
+        source2.Priority = 0;
 
         let resouceCollection = new TodoResourceCollection();
         resouceCollection.Data = [source, source2];
@@ -143,9 +168,14 @@ describe('flatten', () => {
 
         expect(destination.length).to.equal(2);
         expect(destination[0].id).to.equal(source.Id);
-        expect(destination[0].created).to.equal(new Date(source.Created));
+        expect(destination[0].created.getTime()).to.equal(new Date(source.Created).getTime());
         expect(destination[0].description).to.equal(source.Description);
         expect(destination[0].priority).to.equal(source.Priority);
+
+        expect(destination[1].id).to.equal(source2.Id);
+        expect(destination[1].created.getTime()).to.equal(new Date(source2.Created).getTime());
+        expect(destination[1].description).to.equal(source2.Description);
+        expect(destination[1].priority).to.equal(source2.Priority);
 
         done();
 

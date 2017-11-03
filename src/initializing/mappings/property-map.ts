@@ -4,9 +4,11 @@
 export class PropertyMap {
     
     flatternSourceToDestination = false;
+    destinationType: string;
+    
     sourceName: string;
     sourceGetter: (instance: any) => any;
-    ignoreSource: boolean = false;
+
 
     destinationName: string;
     destinationSetter: (instance: any, value: any) => void;

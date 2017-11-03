@@ -11,7 +11,7 @@ export class Types {
     static value = "value";
 
     static asArray(type: string | Constructor){
-        return typeof type == "string" ? `${type}[]` : (<any>type).$$type;
+        return typeof type == "string" ? `${type}[]` : `${(<any>type).$$type}[]`;
     }
 
 

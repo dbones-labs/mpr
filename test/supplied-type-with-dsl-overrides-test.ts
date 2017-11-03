@@ -92,7 +92,7 @@ describe('dsl - given type inforation is provided manually', () => {
 
         expect(destination.$type).to.equal("models.todo");
         expect(destination.id).to.equal(source.id);
-        expect(destination.created).to.equal(source.created);
+        expect(destination.created.getTime()).to.equal(source.created.getTime());
         expect(destination.description).to.equal(source.description);
         expect(destination.priority).to.equal(source.priority);
 

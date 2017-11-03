@@ -45,7 +45,7 @@ gulp.task('prep', ['prep-commonjs'], function () {
 
 gulp.task('prep-commonjs', ['test'], function () {
     return gulp.src(["src/**/*.js", "src/**/*.d.ts", "!gulpfile.js"])
-        .pipe(gulp.dest('./dist/commonjs'));
+        .pipe(gulp.dest('./dist'));
 });
 
 gulp.task('clean', function () {

@@ -18,7 +18,13 @@
     "typescript",
     "ts",
     "js",
-    "javascript"
+    "javascript",
+    "viewmodel",
+    "spa",
+    "single-page-application",
+    "dto",
+    "deep-copy",
+    "copy"
   ],
   "author": "dbones labs",
   "license": "Apache-2.0",

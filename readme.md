@@ -6,17 +6,17 @@ Give it a whirl, it may just work for you.
 
 ##Features 
 
-* auto-mapping (requires registering of typeMeta)
+* **auto-mapping** (requires registering of typeMeta)
 * annotations (Decorators) support
-* complete POJO support (alternative to annotations)
-* support for es6 classes, and anon types **{ name: "anon object" }**
-* supports for arrays 
-* supports mapping complex types (no support for bi-directional)
-* supports flattening and expanding source to destination
-* supports deep copying, via automapping 
-* mapping overriding via dsl (loosely based on Automapper from .NET)
-* modular setup
-* many places where default behavior can be overridden.
+* complete **POJO** support (alternative to annotations)
+* support for **es6** classes, **es5**, and **anon types**.
+* supports for **arrays** 
+* supports mapping **complex types** (no support for bi-directional)
+* supports **flattening** and expanding source to destination
+* supports **deep copying**, via auto-mapping 
+* mapping overriding via **dsl** (loosely based on Automapper from .NET)
+* **modular** setup
+* many places where default behavior can be **overridden**.
 
 ##quick code example:
 

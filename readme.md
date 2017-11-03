@@ -12,6 +12,8 @@ Give it a whirl, it may just work for you.
 * support for es6 classes, and anon types **{ name: "anon object" }**
 * supports for arrays 
 * supports mapping complex types (no support for bi-directional)
+* supports flattening and expanding source to destination
+* supports deep copying, via automapping 
 * mapping overriding via dsl (loosely based on Automapper from .NET)
 * modular setup
 * many places where default behavior can be overridden.

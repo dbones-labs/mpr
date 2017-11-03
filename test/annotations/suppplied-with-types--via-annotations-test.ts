@@ -58,7 +58,7 @@ describe('automap - given type inforation is provided by annotations', () => {
         let destination = mapper.map(source, "dto.todo");
 
         expect(destination.id).to.equal(source.id);
-        expect(destination.created).to.equal(source.created);
+        expect(destination.created.getTime()).to.equal(source.created.getTime());
         expect(destination.description).to.equal(source.description);
         expect(destination.priority).to.equal(source.priority);
         expect(destination.comments[0]).to.equal("comment 1");
@@ -89,7 +89,7 @@ describe('automap - given type inforation is provided by annotations', () => {
 
         expect(destination.$type).to.equal("models.todo");
         expect(destination.id).to.equal(source.id);
-        expect(destination.created).to.equal(source.created);
+        expect(destination.created.getTime()).to.equal(source.created.getTime());
         expect(destination.description).to.equal(source.description);
         expect(destination.priority).to.equal(source.priority);
         expect(destination.owner.name).to.equal(source.owner.name)

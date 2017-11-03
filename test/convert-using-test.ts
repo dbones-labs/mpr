@@ -71,10 +71,10 @@ describe('type converter - provide a typeconverter at the type level', () => {
         source.priority = Priority.medium;
 
         let source2 = new Todo();
-        source.id = "1233";
-        source.created = new Date(2017, 09, 18);
-        source.description = "create a mapper 123";
-        source.priority = Priority.low;
+        source2.id = "1233";
+        source2.created = new Date(2017, 09, 18);
+        source2.description = "create a mapper 123";
+        source2.priority = Priority.low;
 
 
         let destination = mapper.map([source, source2], "dto.todo[]");

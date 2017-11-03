@@ -37,6 +37,8 @@ export class Builder {
         }
 
         this.typeMetas.set(meta.name, meta);
+        this.createMap(meta.name, meta.name);
+
         return new PropertyBuilder(meta, this._configuration);
     }
 

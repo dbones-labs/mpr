@@ -55,7 +55,7 @@ gulp.task('clean', function () {
 
 gulp.task('bump', ['prep'], function () {
     return gulp.src('./dist/package.json')
-        .pipe(bump({ version: '1.0.' + argv.patch }))
+        .pipe(bump({ version: '1.1.' + argv.patch }))
         .pipe(gulp.dest('dist'));
 });
 

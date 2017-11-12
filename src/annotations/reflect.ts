@@ -2,19 +2,21 @@ import "reflect-metadata";
 import { Constructor } from "../strategies/ctor-strategy";
 import { AnnotationKeys } from "./annotation-keys";
 
-var reflect = Reflect;
+//small polyfil if a Reflect has already been imported and does not support
+//tne getMetadata method (ie when using with aurellia)
+var getMetaData = Reflect.getMetadata || Reflect.getOwnMetadata;
 
 //pure work around.
 export class ReflectMetadata {
     static setTypeData(type: object, value: any): any {
-        reflect.defineMetadata(AnnotationKeys.mapAnnotation, value, type);
+        Reflect.defineMetadata(AnnotationKeys.mapAnnotation, value, type);
     }
 
     static getTypeData(type: object): any {
-        return reflect.getMetadata(AnnotationKeys.mapAnnotation, type);
+        return getMetaData(AnnotationKeys.mapAnnotation, type);
     }
 
     static getPropertyData(type: Constructor, key: string): any {
-        return reflect.getMetadata("design:type", type, key);
+        return getMetaData("design:type", type, key);
     }
 }

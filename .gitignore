@@ -4,3 +4,4 @@ dest/
 *.js
 *.js.map
 *.d.ts
+dist/

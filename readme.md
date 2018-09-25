@@ -1,3 +1,6 @@
+![alt text](https://bitbucket-assetroot.s3.amazonaws.com/c/photos/2018/Sep/14/1288517134-6-mpr-logo_avatar.png "MPR - Object Mapper")
+
+
 #mpr = object mapper
 
 JavaScript/TypeScript library that maps a source object to a destination object.

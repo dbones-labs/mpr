@@ -16,7 +16,7 @@ export interface TypeConverterLocator {
 
 export class DefaultTypeConverterLocator implements TypeConverterLocator {
 
-    private nameExp = new RegExp("([\\.A-Za-z0-9\\-\\*]*)(\\[\\]){0,1}");
+    private _nameExp = new RegExp("([\\.A-Za-z0-9\\-\\*]*)(\\[\\]){0,1}");
     private _mapsBySrcToDest: Dictionary<TypeConverter> = new Dictionary<TypeConverter>();
 
     Add(typeConverter: TypeConverter): void {
@@ -32,14 +32,11 @@ export class DefaultTypeConverterLocator implements TypeConverterLocator {
         let converter = this._mapsBySrcToDest.get(key);
         if (converter != null) return converter;
 
-        //TODO: here fix
         if (lookup.source.isArray == true && lookup.destination.isArray == true) {
             key = this.createKey(Types.objectArray, Types.objectArray);
             let converter = this._mapsBySrcToDest.get(key);
             if (converter != null) return converter;
         }
-
-
 
         throw new Error(`sorry key not supported ${key}`);
     }
@@ -58,7 +55,7 @@ export class DefaultTypeConverterLocator implements TypeConverterLocator {
     }
 
     private getMapComponent(type: string) {
-        let captures = this.nameExp.exec(type);
+        let captures = this._nameExp.exec(type);
 
         let map = new MapComponent();
         map.type = captures[1];

@@ -5,3 +5,4 @@ dest/
 *.js.map
 *.d.ts
 dist/
+package-lock.json

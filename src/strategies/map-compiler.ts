@@ -9,13 +9,24 @@ import { MappingContext } from "../core/mapping-context";
 import { MapInformation } from "../core/map-information";
 import { ArrayCtor } from "./ctor-strategy";
 
+/**
+ * responsible for settings up the Type Converters for all the TypeMaps.
+ */
 export interface MapCompiler {
+
+    /**
+     * build a typeConverter for a TypeMap
+     * @param map the map for which we need a type converter for
+     * @param typeMetas all the typeMetas so we can setup the converter correctly
+     * @param config the mappers configuration
+     */
     Build(map: TypeMap, typeMetas: Dictionary<TypeMeta>, config: Configuration): TypeConverter;
 }
 
 export class DefaultMapCompiler implements MapCompiler {
 
     Build(map: TypeMap, typeMetas: Dictionary<TypeMeta>, config: Configuration): TypeConverter {
+        
         if (map.converter != null) return map.converter;
 
         let info = config.typeConverterLocator.GetMapLookup(map.source || "", map.destination || "");
@@ -58,7 +69,7 @@ export class DefaultMapCompiler implements MapCompiler {
             return setters[property];            
         });
 
-        //scan for non destinational mappings
+        //scan for non destination-al mappings
         map.sourcePropertyMaps.forEach(map => {
             
             if(map.destinationName != null) return;

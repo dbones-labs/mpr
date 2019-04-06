@@ -1,7 +1,4 @@
 import 'mocha';
-import { MapComponent, MapInformation } from '../src/core/map-information';
-import { MappingContext } from '../src/core/mapping-context';
-import { AdvancedMapper } from '../src/mapper';
 import { MapperFactory } from "../src/mapper-factory";
 import { Setup } from "../src/initializing/Setup";
 
@@ -9,7 +6,7 @@ import { expect } from "chai";
 import { Builder } from '../src/initializing/builders/builder';
 import { Types } from '../src/core/types';
 import { mapClass } from '../src/annotations/map-class';
-import { mapProperty } from '../src/annotations/map-property';
+import { mapProperty, mapIdProperty } from '../src/annotations/map-property';
 
 
 class TodoResourceCollection {
@@ -35,7 +32,7 @@ class TodoResource {
 @mapClass('model.todo')
 class Todo {
 
-    @mapProperty()
+    @mapIdProperty()
     id: string;
 
     @mapProperty()
@@ -67,7 +64,7 @@ class MapSetup implements Setup {
         builder.addType(Todo).scanForAttributes();
 
         builder.addType(resourceTypes.todoResourceType, TodoResource)
-            .addProperty("Id", Types.string)
+            .addIdProperty("Id", Types.string)
             .addProperty("Created", Types.string)
             .addProperty("Description", Types.string)
             .addProperty("Priority", Types.number);
@@ -89,16 +86,14 @@ class MapSetup implements Setup {
 }
 
 
-describe('flatten', () => {
+describe('advance collection', () => {
 
     let mapperFactor = new MapperFactory();
     mapperFactor.addSetup(new MapSetup());
 
     let mapper = mapperFactor.createMapper();
-    let advancedMapper = <AdvancedMapper>mapper;
-
-    it("map models collection to a resource custom collection", (done) => {
-
+    
+    it("update destination objects from source", (done) => {
         
         let source = new Todo();
         source.id = "123";
@@ -112,22 +107,7 @@ describe('flatten', () => {
         source2.description = "hmmmm";
         source2.priority = Priority.low;
 
-        let src = new MapComponent();
-        src.type = (<any>Todo).$$type;
-        src.isArray = true;
-        
-        let dest = new MapComponent()
-        dest.type = resourceTypes.todoResourceCollectionType;
-
-        let info = new MapInformation(src, dest);
-
-        let context = new MappingContext();
-        context.source = [source, source2];
-        context.mapInformation = info;
-        context.mapper = advancedMapper;
-        
-        advancedMapper.mapIt(context);
-        let destination = context.destination;
+        let destination = mapper.mapUsingTypes([source, source2], Types.asArray(Todo), resourceTypes.todoResourceCollectionType);
 
         expect(destination.Data.length).to.equal(2);
         expect(destination.Data[0].Id).to.equal(source.id);
@@ -135,19 +115,36 @@ describe('flatten', () => {
         expect(destination.Data[0].Description).to.equal(source.description);
         expect(destination.Data[0].Priority).to.equal(source.priority);
 
+        let source3 = new Todo();
+        source3.id = "23332";
+        source3.created = new Date(2007, 9, 17);
+        source3.description = "oooohhh anothoer item";
+        source3.priority = Priority.low;
 
-        expect(destination.Data[1].Id).to.equal(source2.id);
-        expect(destination.Data[1].Created).to.equal(source2.created.toISOString());
-        expect(destination.Data[1].Description).to.equal(source2.description);
-        expect(destination.Data[1].Priority).to.equal(source2.priority);
+        source.description = "ids allow us to update the object reference...";
+        source.priority = Priority.high;
 
+        //the action under test
+        mapper.mapToUsingTypes([source3, source], Types.asArray(Todo), destination, resourceTypes.todoResourceCollectionType);
+
+        //note the destination reference is part of the test
+        expect(destination.Data.length).to.equal(2);
+        expect(destination.Data[0].Id).to.equal(source3.id);
+        expect(destination.Data[0].Created).to.equal(source3.created.toISOString());
+        expect(destination.Data[0].Description).to.equal(source3.description);
+        expect(destination.Data[0].Priority).to.equal(source3.priority);
+
+        expect(destination.Data[1].Id).to.equal(source.id);
+        expect(destination.Data[1].Created).to.equal(source.created.toISOString());
+        expect(destination.Data[1].Description).to.equal(source.description);
+        expect(destination.Data[1].Priority).to.equal(source.priority);
 
         done();
 
     });
 
 
-    it("map resouce custom collection to todo collection", (done) => {
+    it("map resource custom collection to todo collection", (done) => {
 
         let source = new TodoResource();
         source.Id = "123";
@@ -172,10 +169,31 @@ describe('flatten', () => {
         expect(destination[0].description).to.equal(source.Description);
         expect(destination[0].priority).to.equal(source.Priority);
 
-        expect(destination[1].id).to.equal(source2.Id);
-        expect(destination[1].created.getTime()).to.equal(new Date(source2.Created).getTime());
-        expect(destination[1].description).to.equal(source2.Description);
-        expect(destination[1].priority).to.equal(source2.Priority);
+
+        let source3 = new TodoResource();
+        source3.Id = "23yy32";
+        source3.Created = new Date(2007, 9, 17).toISOString();
+        source3.Description = "hmmmm";
+        source3.Priority = 0;
+
+        source.Description = "ids allow us to update the object reference...";
+        source.Priority = 0;
+
+        resourceCollection.Data = [source3, source];
+
+        mapper.mapToUsingTypes(resourceCollection, resourceTypes.todoResourceCollectionType, destination, Types.asArray(Todo));
+
+        expect(destination.length).to.equal(2);
+
+        expect(destination[0].id).to.equal(source3.Id);
+        expect(destination[0].created.getTime()).to.equal(new Date(source3.Created).getTime());
+        expect(destination[0].description).to.equal(source3.Description);
+        expect(destination[0].priority).to.equal(source3.Priority);
+        
+        expect(destination[1].id).to.equal(source.Id);
+        expect(destination[1].created.getTime()).to.equal(new Date(source.Created).getTime());
+        expect(destination[1].description).to.equal(source.Description);
+        expect(destination[1].priority).to.equal(source.Priority);
 
         done();
 

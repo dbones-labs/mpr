@@ -7,7 +7,7 @@ JavaScript/TypeScript library that maps a source object to a destination object.
 
 Give it a whirl, it may just work for you.
 
-##Features 
+## Features 
 
 * **auto-mapping** (requires registering of typeMeta)
 * annotations (Decorators) support
@@ -21,11 +21,11 @@ Give it a whirl, it may just work for you.
 * **modular** setup
 * many places where default behavior can be **overridden**.
 
-##quick code example:
+## quick code example:
 
 lets say we have a Todo class, which we want to map to a Todo Dto.
 
-###Install
+### Install
 
 install into your project
 
@@ -33,7 +33,7 @@ install into your project
 npm install @dboneslabs/mpr --save
 ```
 
-###Todo class
+### Todo class
 
 the following is one way to detail your class, hopefully this way will remove a number of magic strings.
 
@@ -68,7 +68,7 @@ export class Todo {
 
 
 
-###setup
+### setup
 
 you can provide many setup classes, which detail all the types and mappings.
 
@@ -104,7 +104,7 @@ class MapSetup implements Setup {
         //note this one uses conventions to auto map the properties by matching name.
         builder.createMap("dto.todo", Todo);
 
-        //as we map the person we can now support deep object higherarchies.
+        //as we map the person we can now support deep object hierarchies.
         builder.createMap(Person, "dto.person");
         builder.createMap("dto.person", Person);
 
@@ -112,7 +112,7 @@ class MapSetup implements Setup {
 }
 ```
 
-###create a mapper instance 
+### create a mapper instance 
 
 to create an instance of the mapper, you need to create it via the MapperFactory as follows
 
@@ -127,7 +127,7 @@ mapperFactor.addSetup(new MapSetup());
 let mapper = mapperFactor.createMapper();
 ```
 
-###use it
+### use it
 
 its simple to use, all you need to do is pass it an instance and the desired types you want to populate.
 
@@ -135,7 +135,7 @@ its simple to use, all you need to do is pass it an instance and the desired typ
 //in this case the source is an anon instance
 let source = {
     id: "123",
-    created: new Date(2017, 09, 17),
+    created: new Date(2017, 9, 17),
     description: "map a anon object to a known type",
     priority: 2,
     comments: ["comment a","comment b"],
@@ -146,6 +146,6 @@ let source = {
     }
 }
 
-//destination is an instacne of the todo type, populated accordingly.
+//destination is an instance of the todo type, populated accordingly.
 let destination = mapper.map(source, Todo);
 ```

@@ -14,5 +14,5 @@ export interface Property {
     typeName: string;
     suppliedType: string|Constructor;
     name: string;
-
+    isId: boolean;
 }

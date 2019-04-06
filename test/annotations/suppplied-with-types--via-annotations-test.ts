@@ -19,7 +19,7 @@ class MapSetup implements Setup {
             .addProperty("created", Types.date)
             .addProperty("description", Types.string)
             .addProperty("priority", Types.number)
-            .addProperty("comments", Types.AsArray(Types.string))
+            .addProperty("comments", Types.asArray(Types.string))
             .addProperty("owner", "dto.person");
 
         builder.addType("dto.person")
@@ -36,7 +36,7 @@ class MapSetup implements Setup {
 }
 
 
-describe('automap - given type inforation is provided by annotations', () => {
+describe('automap - given type information is provided by annotations', () => {
 
     let mapperFactor = new MapperFactory();
     mapperFactor.addSetup(new MapSetup());
@@ -47,7 +47,7 @@ describe('automap - given type inforation is provided by annotations', () => {
 
         let source = new Todo();
         source.id = "123";
-        source.created = new Date(2017, 09, 17);
+        source.created = new Date(2017, 9, 17);
         source.description = "create a mapper";
         source.priority = Priority.medium;
         source.comments.push("comment 1");
@@ -74,7 +74,7 @@ describe('automap - given type inforation is provided by annotations', () => {
 
         let source = {
             id: "123",
-            created: new Date(2017, 09, 17),
+            created: new Date(2017, 9, 17),
             description: "map a anon object to a known type",
             priority: 2,
             comments: ["comment a","comment b"],

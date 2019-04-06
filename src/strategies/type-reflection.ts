@@ -25,12 +25,12 @@ export class DefaultTypeReflection implements TypeReflection {
     getType(instance: any, typeStrategy: TypeStrategy): string {
 
         let typeName = Object.prototype.toString.call(instance); 
-        let candiateType = this._types.get(typeName);
+        let candidateType = this._types.get(typeName);
 
-        if (candiateType != Types.object) return candiateType;
+        if (candidateType != Types.object) return candidateType;
 
         let strongType = typeStrategy.getTypeFromTypeProperty(instance);
-        return strongType == null ? candiateType : strongType;
+        return strongType == null ? candidateType : strongType;
 
     }
 

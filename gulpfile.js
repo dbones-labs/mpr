@@ -11,7 +11,7 @@ var tsProjectAmd = ts.createProject('tsconfig.amd.json');
 var tsProjectSystem = ts.createProject('tsconfig.system.json');
 
 gulp.task('clean', () => {
-    return gulp.src('./dist', { read: false })
+    return gulp.src('./dist', { read: false,  allowEmpty: true })
         .pipe(clean());
 });
 

@@ -1,9 +1,6 @@
 export interface NamingConvention {
     convert(name: string): string;
-
-
 }
-
 
 export class CamelCaseNamingConvention implements NamingConvention {
 
@@ -16,6 +13,5 @@ export class CamelCaseNamingConvention implements NamingConvention {
             return index == 0 ? letter.toLowerCase() : letter.toUpperCase();
         });//.replace(/\s+/g, '');
     }
-
 
 }

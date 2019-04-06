@@ -13,10 +13,4 @@ export class Types {
     static asArray(type: string | Constructor){
         return typeof type == "string" ? `${type}[]` : `${(<any>type).$$type}[]`;
     }
-
-
-    /**plesae use asArray() */
-    static AsArray(type: string){
-        return this.asArray(type);
-    }
 }

@@ -8,13 +8,13 @@ import { TypeReflection, DefaultTypeReflection } from "./strategies/type-reflect
 import { Constructor } from './strategies/ctor-strategy';
 
 export class JsMapper implements AdvancedMapper {
-
+    
     private _configuration: Configuration;
     private _typeConverterLocator: TypeConverterLocator;
     private _typeReflection: TypeReflection;
 
     /**
-     * create a mapper, do not use this direcly, create this class via the MapperFactory class.
+     * create a mapper, do not use this directly, create this class via the MapperFactory class.
      * @param configuration the configuration to be used by this mapper
      * @param typeConverters the type converters this mapper will use
      */
@@ -46,6 +46,22 @@ export class JsMapper implements AdvancedMapper {
         return ctx.destination;
     }
 
+    mapUsingTypes(source: any, sourceType: string | Constructor, destinationType: string | Constructor): any {
+        
+        if(typeof sourceType != "string") {
+            sourceType = (<any>sourceType).$$type
+        }
+        if(typeof destinationType != "string") {
+            destinationType = (<any>destinationType).$$type
+        }
+
+        let mapLookup = this._typeConverterLocator.GetMapLookup(<string>sourceType, <string>destinationType);
+        let ctx = this.createContext(source, null, mapLookup);
+
+        this.mapIt(ctx);
+        return ctx.destination;
+    }
+
     mapTo(source: any, destination: any) {
         if (source == null) return;
         if (destination == null) throw new Error("destination is null");
@@ -53,6 +69,21 @@ export class JsMapper implements AdvancedMapper {
         let sourceType = this._typeReflection.getType(source, this._configuration.typeStrategy);
         let destinationType = this._typeReflection.getType(source, this._configuration.typeStrategy);
         let mapLookup = this._typeConverterLocator.GetMapLookup(sourceType, destinationType);
+        let ctx = this.createContext(source, destination, mapLookup);
+
+        this.mapIt(ctx);
+    }
+
+    mapToUsingTypes(source: any, sourceType: string | Constructor, destination: any, destinationType: string | Constructor): void {
+
+        if(typeof sourceType != "string") {
+            sourceType = (<any>sourceType).$$type
+        }
+        if(typeof destinationType != "string") {
+            destinationType = (<any>destinationType).$$type
+        }
+
+        let mapLookup = this._typeConverterLocator.GetMapLookup(<string>sourceType, <string>destinationType);
         let ctx = this.createContext(source, destination, mapLookup);
 
         this.mapIt(ctx);
@@ -68,6 +99,8 @@ export class JsMapper implements AdvancedMapper {
         return context.destination;
     }
 
+   
+
     private createContext(source: any, destination: any, mapInformation: MapInformation) {
         let ctx = new MappingContext();
         ctx.destination = destination;
@@ -75,6 +108,10 @@ export class JsMapper implements AdvancedMapper {
         ctx.mapper = this;
         ctx.mapInformation = mapInformation;
         return ctx;
+    }
+
+    configuration(): Configuration {
+        return this._configuration;
     }
 
 }

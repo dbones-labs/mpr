@@ -47,7 +47,7 @@ describe('type converter - provide a typeconverter at the type level', () => {
 
         let source = new Todo();
         source.id = "123";
-        source.created = new Date(2017, 09, 17);
+        source.created = new Date(2017, 9, 17);
         source.description = "create a mapper";
         source.priority = Priority.medium;
 
@@ -66,13 +66,13 @@ describe('type converter - provide a typeconverter at the type level', () => {
 
         let source = new Todo();
         source.id = "123";
-        source.created = new Date(2017, 09, 17);
+        source.created = new Date(2017, 9, 17);
         source.description = "create a mapper";
         source.priority = Priority.medium;
 
         let source2 = new Todo();
         source2.id = "1233";
-        source2.created = new Date(2017, 09, 18);
+        source2.created = new Date(2017, 9, 18);
         source2.description = "create a mapper 123";
         source2.priority = Priority.low;
 

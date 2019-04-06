@@ -51,7 +51,7 @@ class MapSetup implements Setup {
 }
 
 
-describe('dsl - given type inforation is provided manually', () => {
+describe('dsl - given type information is provided manually', () => {
 
     let mapperFactor = new MapperFactory();
     mapperFactor.addSetup(new MapSetup());
@@ -62,7 +62,7 @@ describe('dsl - given type inforation is provided manually', () => {
 
         let source = new Todo();
         source.id = "123";
-        source.created = new Date(2017, 09, 17);
+        source.created = new Date(2017, 9, 17);
         source.description = "create a mapper";
         source.priority = Priority.medium;
 
@@ -82,7 +82,7 @@ describe('dsl - given type inforation is provided manually', () => {
 
         let source = {
             id: "123",
-            created: new Date(2017, 09, 17),
+            created: new Date(2017, 9, 17),
             description: "map a anon object to a known type",
             priority: 2,
             $type: "dto.todo"

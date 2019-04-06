@@ -20,18 +20,18 @@ export class DefaultTypeConverter implements TypeConverter {
 
     execute(context: MappingContext): void {
 
-        if(context.destination == null) 
+        if (context.destination == null)
             context.destination = this.ctor.createInstance();
 
 
         this.setters.forEach(setter => {
             let ctx = context;
             try {
-                setter(ctx);    
+                setter(ctx);
             } catch (error) {
                 throw new Error(`failed to map ${this.sourceType} => ${this.destinationType}, innerException: ${error}`);
             }
-            
+
         });
 
     }

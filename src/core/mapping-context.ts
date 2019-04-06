@@ -2,7 +2,7 @@ import { AdvancedMapper } from "../mapper";
 import { MapInformation } from "./map-information";
 
 /**
- * this holds all the infmoration about the current maping of 2 objects
+ * this holds all the information about the current mapping of 2 objects
  */
 export class MappingContext {
     /**
@@ -21,7 +21,7 @@ export class MappingContext {
     mapper: AdvancedMapper;
 
     /**
-     * informaton about the mapping.
+     * information about the mapping.
      */
     mapInformation: MapInformation;
 }

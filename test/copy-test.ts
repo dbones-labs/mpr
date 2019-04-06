@@ -54,13 +54,13 @@ describe('copy', () => {
         
         let source = new Todo();
         source.id = "123";
-        source.created = new Date(2017, 09, 17);
+        source.created = new Date(2017, 9, 17);
         source.description = "create a mapper";
         source.priority = Priority.medium;
 
         let source2 = new Todo();
         source2.id = "2332";
-        source2.created = new Date(2007, 09, 17);
+        source2.created = new Date(2007, 9, 17);
         source2.description = "hmmmm";
         source2.priority = Priority.low;
 

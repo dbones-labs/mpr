@@ -5,13 +5,17 @@ import { NamingConvention, CamelCaseNamingConvention } from "./strategies/naming
 import { TypeConverter } from './core/type-converter';
 import { Converts } from './core/converters';
 import { ExtractMetadata } from './annotations/extract-metadata';
+import { IdStrategy, DefaultIdStrategy } from './strategies/id-strategy';
+import { IdLocator, DefaultIdLocator } from './strategies/id-locator';
 
 export class Configuration {
 
-    typeStrategy: TypeStrategy = new DefaultTypeStrategy();
     namingConvention: NamingConvention = new CamelCaseNamingConvention();
+    typeStrategy: TypeStrategy = new DefaultTypeStrategy();
     typeConverterLocator: TypeConverterLocator = new DefaultTypeConverterLocator();
     typeConverters: TypeConverter[] = new Converts().getConverters();
     extractMetadata: ExtractMetadata = new ExtractMetadata();
+    idStrategy: IdStrategy = new DefaultIdStrategy();
+    idLocator: IdLocator = new DefaultIdLocator();
 
 }

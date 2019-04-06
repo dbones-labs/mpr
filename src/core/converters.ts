@@ -11,8 +11,8 @@ export class Converts {
 
     getConverters() {
         return [
-            <TypeConverter>new ArrayConverter(),
-            <TypeConverter>new ValueArrayConverter(),
+            <TypeConverter>new InstanceArrayConverter(),
+            <TypeConverter>new InstanceValueArrayConverter(),
 
             <TypeConverter>new StringToStringConverter(),
 
@@ -34,7 +34,80 @@ export class Converts {
         ];
     }
 
+    getOldConverts() {
+        return [
+            <TypeConverter>new ArrayConverter(),
+            <TypeConverter>new ValueArrayConverter(),
+        ];
+    }
+
 }
+
+
+class InstanceArrayConverter implements TypeConverter {
+    sourceType: string = Types.objectArray;
+    destinationType: string = Types.objectArray;
+
+    execute(ctx: MappingContext): void {
+        if (ctx.destination == null) ctx.destination = [];
+
+        //cache the current destination
+        let listWithIds: any = {};
+        (<any[]>ctx.destination).forEach(item => {
+            let id = ctx.mapper.configuration().idLocator.getId(item, ctx.mapInformation.destination.type);
+            if (id == null) return;
+            listWithIds[id] = item;
+        });
+
+        //empty the dest list
+        ctx.destination.length = 0;
+
+        (<any[]>ctx.source).forEach(item => {
+            let id = ctx.mapper.configuration().idLocator.getId(item, ctx.mapInformation.source.type);
+
+            //completely new item with no identifier.
+            if (id == null) {
+                let value = ctx.mapper.map(item, ctx.mapInformation.destination.type);
+                ctx.destination.push(value);
+                return;
+            }
+
+            //lets see if we know the item.
+            let existingItem = listWithIds[id];
+
+            //new item
+            if (existingItem == null) {
+                let value = ctx.mapper.map(item, ctx.mapInformation.destination.type);
+                ctx.destination.push(value);
+                return;
+            }
+
+            //existing item
+            ctx.mapper.mapTo(item, existingItem);
+            ctx.destination.push(existingItem);
+        });
+    }
+}
+
+class InstanceValueArrayConverter implements TypeConverter {
+    sourceType: string = 'value[]';
+    destinationType: string = 'value[]';
+
+    execute(ctx: MappingContext) {
+
+        if (ctx.destination == null) ctx.destination = [];
+        ctx.destination.length = 0;
+
+        (<any[]>ctx.source).forEach(item => {
+            let value = ctx.mapper.map(item, Types.value);
+            ctx.destination.push(value);
+        });
+
+        return ctx.destination;
+    }
+}
+
+
 
 /**
  * a catch all for a collection of things.
@@ -42,10 +115,11 @@ export class Converts {
 class ArrayConverter implements TypeConverter {
     sourceType: string = Types.objectArray;
     destinationType: string = Types.objectArray;
+
     execute(ctx: MappingContext) {
 
         if (ctx.destination == null) ctx.destination = [];
-        
+
         (<any[]>ctx.source).forEach(item => {
             let value = ctx.mapper.map(item, ctx.mapInformation.destination.type);
             ctx.destination.push(value);
@@ -62,6 +136,7 @@ class ArrayConverter implements TypeConverter {
 class ValueArrayConverter implements TypeConverter {
     sourceType: string = 'value[]';
     destinationType: string = 'value[]';
+
     execute(ctx: MappingContext) {
 
         if (ctx.destination == null) ctx.destination = [];

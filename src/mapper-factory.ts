@@ -39,7 +39,7 @@ export class MapperFactory {
 
         //setup the converters from the user
         let converters = this._builder.mappings.map(mapping => {
-            return this.mapCompiler.Build(mapping, this._builder.typeMetas, this._config);
+            return this.mapCompiler.build(mapping, this._builder.typeMetas, this._config);
         });
 
         //get the default converters

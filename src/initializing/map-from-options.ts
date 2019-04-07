@@ -17,7 +17,7 @@ export class MapFromOptions<TSrc> {
      * @param source the source where we can source the value from.
      * @param sourceName the name of the source, this is only need if you passed a delegae in for the source and we a mappping to an Anon type.
      */
-    mapFrom(source: string | ((srcInstnace: TSrc ) => any), sourceName: string = null) {
+    mapFrom(source: string | ((srcInstance: TSrc ) => any), sourceName: string = null) {
 
         if (typeof source === 'string') {
             this._propertyMap.sourceGetter = (instance: any) => {
@@ -43,7 +43,7 @@ export class MapFromOptions<TSrc> {
     }
 
     /**
-     * this map will IGNORE this destinaiton value
+     * this map will IGNORE this destination value
      */
     ignore() {
         this._propertyMap.ignoreDestination = true;

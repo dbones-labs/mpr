@@ -24,7 +24,7 @@ export class JsMapper implements AdvancedMapper {
         this._typeReflection = new DefaultTypeReflection();
 
         typeConverters.forEach(converter => {
-            this._typeConverterLocator.Add(converter);
+            this._typeConverterLocator.add(converter);
         });
     }
 
@@ -39,7 +39,7 @@ export class JsMapper implements AdvancedMapper {
 
 
         let sourceType = this._typeReflection.getType(source, this._configuration.typeStrategy);
-        let mapLookup = this._typeConverterLocator.GetMapLookup(sourceType, <string>destinationType);
+        let mapLookup = this._typeConverterLocator.getMapLookup(sourceType, <string>destinationType);
         let ctx = this.createContext(source, null, mapLookup);
 
         this.mapIt(ctx);
@@ -55,7 +55,7 @@ export class JsMapper implements AdvancedMapper {
             destinationType = (<any>destinationType).$$type
         }
 
-        let mapLookup = this._typeConverterLocator.GetMapLookup(<string>sourceType, <string>destinationType);
+        let mapLookup = this._typeConverterLocator.getMapLookup(<string>sourceType, <string>destinationType);
         let ctx = this.createContext(source, null, mapLookup);
 
         this.mapIt(ctx);
@@ -68,7 +68,7 @@ export class JsMapper implements AdvancedMapper {
 
         let sourceType = this._typeReflection.getType(source, this._configuration.typeStrategy);
         let destinationType = this._typeReflection.getType(source, this._configuration.typeStrategy);
-        let mapLookup = this._typeConverterLocator.GetMapLookup(sourceType, destinationType);
+        let mapLookup = this._typeConverterLocator.getMapLookup(sourceType, destinationType);
         let ctx = this.createContext(source, destination, mapLookup);
 
         this.mapIt(ctx);
@@ -83,7 +83,7 @@ export class JsMapper implements AdvancedMapper {
             destinationType = (<any>destinationType).$$type
         }
 
-        let mapLookup = this._typeConverterLocator.GetMapLookup(<string>sourceType, <string>destinationType);
+        let mapLookup = this._typeConverterLocator.getMapLookup(<string>sourceType, <string>destinationType);
         let ctx = this.createContext(source, destination, mapLookup);
 
         this.mapIt(ctx);
@@ -92,7 +92,7 @@ export class JsMapper implements AdvancedMapper {
     mapIt(context: MappingContext) {
         let mapLookup = context.mapInformation;
 
-        let converter = this._typeConverterLocator.GetConverter(mapLookup);
+        let converter = this._typeConverterLocator.getConverter(mapLookup);
         if (converter == null) throw new Error(`mapping not supported, ${mapLookup.source}->${mapLookup.destination}`);
 
         converter.execute(context);

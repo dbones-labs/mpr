@@ -14,8 +14,6 @@ export class ArrayCtor implements CtorStrategy {
     }
 }
 
-
-
 export class TypeCtor implements CtorStrategy {
     _ctor: Constructor;
 
@@ -28,7 +26,6 @@ export class TypeCtor implements CtorStrategy {
     }
 
 }
-
 
 /**
  * a class/type which has a parameter-less constructor.

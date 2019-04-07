@@ -5,11 +5,11 @@ import { Types } from "./types";
 
 export interface TypeConverterLocator {
 
-    Add(typeConverter: TypeConverter): void;
+    add(typeConverter: TypeConverter): void;
 
-    GetConverter(mapName: MapInformation): TypeConverter;
+    getConverter(mapName: MapInformation): TypeConverter;
 
-    GetMapLookup(sourceType: string, destinationType: string): MapInformation;
+    getMapLookup(sourceType: string, destinationType: string): MapInformation;
 }
 
 
@@ -19,13 +19,13 @@ export class DefaultTypeConverterLocator implements TypeConverterLocator {
     private _nameExp = new RegExp("([\\.A-Za-z0-9\\-\\*]*)(\\[\\]){0,1}");
     private _mapsBySrcToDest: Dictionary<TypeConverter> = new Dictionary<TypeConverter>();
 
-    Add(typeConverter: TypeConverter): void {
+    add(typeConverter: TypeConverter): void {
         let key = this.createKey(typeConverter.sourceType, typeConverter.destinationType);
         this._mapsBySrcToDest.set(key, typeConverter);
     }
 
     
-    GetConverter(lookup: MapInformation): TypeConverter {
+    getConverter(lookup: MapInformation): TypeConverter {
 
         let key = this.createKey(lookup.source.getName(), lookup.destination.getName());
 
@@ -42,7 +42,7 @@ export class DefaultTypeConverterLocator implements TypeConverterLocator {
     }
 
 
-    GetMapLookup(sourceType: string, destinationType: string): MapInformation {
+    getMapLookup(sourceType: string, destinationType: string): MapInformation {
 
         let source = this.getMapComponent(sourceType);
         let destination = this.getMapComponent(destinationType);

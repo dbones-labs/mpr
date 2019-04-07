@@ -20,16 +20,16 @@ export interface MapCompiler {
      * @param typeMetas all the typeMetas so we can setup the converter correctly
      * @param config the mappers configuration
      */
-    Build(map: TypeMap, typeMetas: Dictionary<TypeMeta>, config: Configuration): TypeConverter;
+    build(map: TypeMap, typeMetas: Dictionary<TypeMeta>, config: Configuration): TypeConverter;
 }
 
 export class DefaultMapCompiler implements MapCompiler {
 
-    Build(map: TypeMap, typeMetas: Dictionary<TypeMeta>, config: Configuration): TypeConverter {
+    build(map: TypeMap, typeMetas: Dictionary<TypeMeta>, config: Configuration): TypeConverter {
         
         if (map.converter != null) return map.converter;
 
-        let info = config.typeConverterLocator.GetMapLookup(map.source || "", map.destination || "");
+        let info = config.typeConverterLocator.getMapLookup(map.source || "", map.destination || "");
 
         let destinationMeta = typeMetas.get(map.destination);
         let sourceMeta = typeMetas.get(map.source);
@@ -82,7 +82,7 @@ export class DefaultMapCompiler implements MapCompiler {
                 let source = map.sourceGetter(ctx.source);
 
                 let sourceType = typeReflector.getType(source, config.typeStrategy);
-                let childInfo = config.typeConverterLocator.GetMapLookup(sourceType, map.destinationType)
+                let childInfo = config.typeConverterLocator.getMapLookup(sourceType, map.destinationType)
 
                 let context = new MappingContext();
                 context.source = source;

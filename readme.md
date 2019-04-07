@@ -43,7 +43,7 @@ the following is one way to detail your class, hopefully this way will remove a 
 @mapClass('models.todo')
 export class Todo {
 
-    @mapProperty()
+    @mapIdProperty()
     id: string;
 
     @mapProperty()
@@ -85,7 +85,7 @@ class MapSetup implements Setup {
 
         //this is an annon type, so we detail what it looks like
         builder.addType("dto.todo")
-            .addProperty("id", Types.string)
+            .addIdProperty("id", Types.string)
             .addProperty("created", Types.date)
             .addProperty("description", Types.string)
             .addProperty("priority", Types.number)

@@ -8,4 +8,17 @@ pipelines:
         script:
           - npm install gulp-cli -g
           - npm install
-          - gulp
+          - gulp bump --patch=$BITBUCKET_BUILD_NUMBER
+        artifacts: # defining the artifacts to be passed to each future step.
+          - dist/**
+    - step:
+        deployment: production
+        name: Deploy to test
+        trigger: manual
+        script:
+          - echo "Deploying to test environment"
+          - pwd
+          - pipe: atlassian/npm-publish:0.2.1
+            variables:
+              NPM_TOKEN: '$NPM'
+              FOLDER: 'dist' # Optional.

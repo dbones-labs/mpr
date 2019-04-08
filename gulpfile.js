@@ -34,7 +34,7 @@ gulp.task('compile-amd', gulp.series('compile-system', () => {
 }));
 
 gulp.task('test', gulp.series('compile', () => {
-    return gulp.src(['test/**/*.test.js'], { read: false })
+    return gulp.src(['test/**/*test.js'], { read: false })
         .pipe(mocha({
             reporter: 'spec'
         }));

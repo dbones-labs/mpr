@@ -1,12 +1,12 @@
 import 'mocha';
-import { MapperFactory } from "../src/mapper-factory";
-import { Setup } from "../src/initializing/Setup";
+import { MapperFactory } from "../../src/mapper-factory";
+import { Setup } from "../../src/initializing/Setup";
 
 import { expect } from "chai";
-import { Builder } from '../src/initializing/builders/builder';
-import { Types } from '../src/core/types';
-import { mapClass } from '../src/annotations/map-class';
-import { mapProperty, mapIdProperty } from '../src/annotations/map-property';
+import { Builder } from '../../src/initializing/builders/builder';
+import { Types } from '../../src/core/types';
+import { mapClass } from '../../src/annotations/map-class';
+import { mapProperty, mapIdProperty } from '../../src/annotations/map-property';
 
 
 class TodoResourceCollection {
@@ -63,14 +63,14 @@ class MapSetup implements Setup {
         //register types
         builder.addType(Todo).scanForAttributes();
 
-        builder.addType(resourceTypes.todoResourceType, TodoResource)
-            .addIdProperty("Id", Types.string)
-            .addProperty("Created", Types.string)
-            .addProperty("Description", Types.string)
-            .addProperty("Priority", Types.number);
+        builder.addType<TodoResource>(resourceTypes.todoResourceType, TodoResource)
+            .addIdProperty(x => x.Id, Types.string)
+            .addProperty(x => x.Created, Types.string)
+            .addProperty(x => x.Description, Types.string)
+            .addProperty(x => x.Priority, Types.number);
 
-        builder.addType(resourceTypes.todoResourceCollectionType, TodoResourceCollection)
-            .addProperty("Data", Types.asArray(resourceTypes.todoResourceType));
+        builder.addType<TodoResourceCollection>(resourceTypes.todoResourceCollectionType, TodoResourceCollection)
+            .addProperty(x => x.Data, Types.asArray(resourceTypes.todoResourceType));
 
         //register maps
         builder.createMap<TodoResourceCollection, Todo[]>(resourceTypes.todoResourceCollectionType, Types.asArray(Todo))
@@ -79,7 +79,7 @@ class MapSetup implements Setup {
         builder.createMap(resourceTypes.todoResourceType, Todo);
 
         builder.createMap<Todo[], TodoResourceCollection>(Types.asArray(Todo), resourceTypes.todoResourceCollectionType)
-            .forMember("Data", opt => opt.mapFrom(src => src));
+            .forMember(x => x.Data, opt => opt.mapFrom(src => src));
 
         builder.createMap(Todo, resourceTypes.todoResourceType);
     }

@@ -23,7 +23,7 @@ export class Builder {
      * @param typeName the name of the type i.e. 'models.todo'
      * @param type the types FUNCTION
      */
-    addType(typeName: string | Constructor, type: Constructor = null): PropertyBuilder {
+    addType<T>(typeName: string | Constructor, type: Constructor = null): PropertyBuilder<T> {
 
         if(typeof typeName != "string") {
             type = <Constructor>typeName;

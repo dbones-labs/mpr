@@ -3,6 +3,7 @@ import { PropertyMap } from "./mappings/property-map";
 import { TypeMap } from "./mappings/type-map";
 import { MapFromOpts, MapFromOptions } from "./map-from-options";
 import { MapSourceOpts, MapSourceOptions } from "./map-source-options";
+import { Reflection } from "./reflection";
 
 export class FluentTypeMapping<TSrc, TDest> {
 
@@ -15,20 +16,23 @@ export class FluentTypeMapping<TSrc, TDest> {
     }
 
     /**
-     * provide explict mapping instunction for a simple propty ie value type or string.
+     * provide explicit mapping instruction for a simple property ie value type or string.
      * @param destinationProperty the name of the property
-     * @param opts mapping instuctions.
+     * @param opts mapping instruction.
      */
-    forMember(destinationProperty: string, opts: MapFromOpts<TSrc>): FluentTypeMapping<TSrc, TDest> {
+    forMember(destinationProperty: string | ((dest: TDest) => any), opts: MapFromOpts<TSrc>): FluentTypeMapping<TSrc, TDest> {
         let propertyMap = new PropertyMap();
-        propertyMap.destinationName = destinationProperty;
+
+        propertyMap.destinationName = (typeof destinationProperty == "string") 
+            ? destinationProperty
+            : Reflection.getPropertyName(destinationProperty);
+        
         propertyMap.destinationSetter = (instance, value) => instance[propertyMap.destinationName] = value;
         let options = new MapFromOptions<TSrc>(propertyMap);
         opts(options);
         this._typeMapping.propertyMaps.push(propertyMap);
         return this;
     }
-
 
     /**
      * apply source directive mapping
@@ -42,7 +46,7 @@ export class FluentTypeMapping<TSrc, TDest> {
         propertyMap.sourceGetter = (typeof sourceProperty == "string")
             ? (instance: any) => instance[<string>sourceProperty]
             : sourceProperty;
-        
+
         propertyMap.destinationType = this._typeMapping.destination;
 
         let options = new MapSourceOptions(propertyMap);

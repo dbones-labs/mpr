@@ -2,8 +2,9 @@ import { TypeMeta } from "../metas/type-meta";
 import { Configuration } from "../../configuration";
 import { Types } from "../../core/types";
 import { Constructor } from "../../strategies/ctor-strategy";
+import { Reflection } from "../reflection";
 
-export class PropertyBuilder {
+export class PropertyBuilder<T> {
 
     private _typeMeta: TypeMeta;
     private _configuration: Configuration;
@@ -18,12 +19,8 @@ export class PropertyBuilder {
      * @param name the name of the property
      * @param type the type of the property, use Types class in the core to help with this. Types.value is the default.
      */
-    addProperty(name: string, type: string = Types.value): PropertyBuilder {
-
-        var processedName = this._configuration.namingConvention.convert(name);
-
-        this._typeMeta.addProperty(name, processedName, type, false);
-        return this;
+    addProperty(name: string | ((item: T) => any), type: string = Types.value): PropertyBuilder<T> {
+        return this.add(name, type, false);
     }
 
     /**
@@ -31,19 +28,28 @@ export class PropertyBuilder {
      * @param name the name of the property
      * @param type the type of the property, use Types class in the core to help with this. Types.value is the default.
      */
-    addIdProperty(name: string, type: string = Types.value): PropertyBuilder {
+    addIdProperty(name: string | ((item: T) => any) , type: string = Types.value): PropertyBuilder<T> {
+        return this.add(name, type, true);
+    }
 
-        var processedName = this._configuration.namingConvention.convert(name);
+    private add(name: string | ((item: T) => any) , type: string = Types.value, isId: boolean = false): PropertyBuilder<T> {
 
-        this._typeMeta.addProperty(name, processedName, type, true);
+        let propertyName =  (typeof name == "string") 
+            ? name
+            : Reflection.getPropertyName(name);
+
+        var processedName = this._configuration.namingConvention.convert(propertyName);
+
+        this._typeMeta.addProperty(propertyName, processedName, type, isId);
         return this;
+
     }
 
 
     /**
      * annotate your class and this method will add the meta to the mapper.
      */
-    scanForAttributes(): PropertyBuilder {
+    scanForAttributes(): PropertyBuilder<T> {
         let type = <Constructor>this._typeMeta.actualType;
         if (type == null) throw new Error("you need to set a type to scan");
 

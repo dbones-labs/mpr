@@ -29,11 +29,11 @@ enum Priority {
 class MapSetup implements Setup {
     configure(builder: Builder): void {
 
-        builder.addType("models.todo", Todo)
-            .addProperty("id", Types.string)
-            .addProperty("created", Types.date)
-            .addProperty("description", Types.string)
-            .addProperty("priority", Types.number);
+        builder.addType<Todo>("models.todo", Todo)
+            .addProperty(x => x.id, Types.string)
+            .addProperty(x => x.created, Types.date)
+            .addProperty(x => x.description, Types.string)
+            .addProperty(x => x.priority, Types.number);
 
         builder.addType("dto.todo")
             .addProperty("id", Types.string)

@@ -74,7 +74,7 @@ export class DefaultMapCompiler implements MapCompiler {
             
             if(map.destinationName != null) return;
 
-            if(!map.flatternSourceToDestination) return;
+            if(!map.flattenSourceToDestination) return;
 
             let typeReflector = new DefaultTypeReflection();
 

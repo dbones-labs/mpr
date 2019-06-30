@@ -12,11 +12,17 @@ export class MapSourceOptions {
         this._propertyMap = propertyMap;
     }
 
-
     /**
      * this source value will be ignored
      */
+    flatten() {
+        this._propertyMap.flattenSourceToDestination = true;
+    }
+
+    /**
+     * this source value will be ignored (please use flatten instead)
+     */
     flattern() {
-        this._propertyMap.flatternSourceToDestination = true;
+        this._propertyMap.flattenSourceToDestination = true;
     }
 }

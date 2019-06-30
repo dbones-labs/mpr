@@ -52,7 +52,7 @@ gulp.task('prep', gulp.series('prep-commonjs', () => {
 
 gulp.task('bump', gulp.series('prep', () => {
     return gulp.src('./dist/package.json')
-        .pipe(bump({ version: '3.0.' + argv.patch }))
+        .pipe(bump({ version: '3.1.' + argv.patch }))
         .pipe(gulp.dest('dist'));
 }));
 

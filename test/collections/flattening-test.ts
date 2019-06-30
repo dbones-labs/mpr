@@ -82,7 +82,7 @@ class MapSetup implements Setup {
         builder.createMap(resourceTypes.todoResourceType, Todo);
 
         builder.createMap<Todo[], TodoResourceCollection>(Types.asArray(Todo), resourceTypes.todoResourceCollectionType)
-            .forMember(x => x.Data, opt => opt.mapFrom(src => src));
+            .forMember(dest => dest.Data, opt => opt.mapFrom(src => src));
 
         builder.createMap(Todo, resourceTypes.todoResourceType);
     }

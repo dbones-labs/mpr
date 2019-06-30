@@ -19,13 +19,13 @@ export class TypeMap {
 
 
     /**
-     * any propery mappings
+     * any property mappings
      * destination from source
      */
     propertyMaps: PropertyMap[] = [];
     
     /**
-     * any propery mappings
+     * any property mappings
      * source to destination
      */
     sourcePropertyMaps: PropertyMap[] = [];
@@ -36,7 +36,7 @@ export class TypeMap {
     converter: TypeConverter;
 
     /**
-     * create a mappping
+     * create a mapping
      * @param source the source type
      * @param destination the target type
      */

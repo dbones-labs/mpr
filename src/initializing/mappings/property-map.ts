@@ -1,9 +1,9 @@
 /**
- * each class map should have seval property maps
+ * each class map should have several property maps
  */
 export class PropertyMap {
     
-    flatternSourceToDestination = false;
+    flattenSourceToDestination = false;
     destinationType: string;
     
     sourceName: string;

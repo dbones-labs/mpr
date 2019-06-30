@@ -30,13 +30,10 @@ export function mapClass(typeName: string): ClassDecorator {
 }
 
 
-
+//need to moved into a util class.
 function classDecorator<T extends { new(...args: any[]): {} }>(constructor: T, typeName: string) {
     return class extends constructor {
         static $$type = typeName;
         $type = typeName;
     }
 }
-
-
-
